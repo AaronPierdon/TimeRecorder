@@ -6,48 +6,25 @@
 package timerecorder;
 
 
-import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.fxml.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import timerecorderdatamodel.Task;
-import timerecorderdatamodel.TaskRepository;
 import utility.io.parse.LongToReadableTime;
 
-/**
- *
- * @author Aaron
- */
+
 public class MainController{
     
         ColorChanger colorChanger;
@@ -269,6 +246,7 @@ public class MainController{
         public void startTimerGUI(){
             hideControls();
             
+            root.setStyle("-fx-background-color: #000000");
             
             root.getChildren().clear();
             
@@ -434,6 +412,7 @@ public class MainController{
         
         // Restores the root border pane to default
         protected void restoreRoot(){
+            root.setStyle("-fx-background-color: #ffffff");
             clearRoot();
             restoreRootPanes();
             updateTaskList();
