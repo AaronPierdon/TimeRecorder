@@ -22,6 +22,9 @@ import timerecorderdatamodel.TaskRepository;
  */
 public class TimeRecorder extends Application {
     
+    public static final File DEFAULTDIR = new File(System.getProperty("user.home") +
+            "\\documents\\Time Recorder\\");
+    
     // Used for creating a file chooser
     public static Stage theStage;
     
@@ -86,12 +89,16 @@ public class TimeRecorder extends Application {
     
     // Storage Managment
     public static File saveFile(){
-        File file = new FileChooser().showSaveDialog(theStage);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(DEFAULTDIR);
+        File file = fileChooser.showSaveDialog(theStage);
         return file;
     }
     
     public static File openFile(){
-        File file = new FileChooser().showOpenDialog(theStage);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(DEFAULTDIR);
+        File file = fileChooser.showOpenDialog(theStage);
         return file;
     }
 

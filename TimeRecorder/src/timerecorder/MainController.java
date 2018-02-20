@@ -98,12 +98,12 @@ public class MainController{
         @FXML
         protected void saveFile(ActionEvent event){
                 
-                
-                System.out.println(this.dataController.getTaskRepo().getTasks().
-                        get(0));
-                
-                // Start save routine
-                storageController.saveData(this.dataController.getTaskRepo(), true);
+                // Make sure there is data to save
+                if(!this.dataController.getTaskRepo().getTasks().isEmpty()){
+                    // Start save routine
+                    storageController.saveData(this.dataController.getTaskRepo(), true);
+                }
+
                 
                 
                 
