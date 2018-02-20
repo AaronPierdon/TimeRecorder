@@ -27,7 +27,7 @@ import utility.io.parse.LongToReadableTime;
 
 public class MainController{
     
-        ColorChanger colorChanger;
+ 
     
         // Main GUI elements that need to be altered or used
         @FXML private Button  btnAddTask, btnEditTime,
@@ -40,22 +40,18 @@ public class MainController{
         @FXML private VBox vBoxTaskList;
         @FXML private VBox vBoxRight;
         @FXML private HBox hBoxTop;
-        
-        
         @FXML private ListView taskList;
         
-        // Timer Readout
+        // Timer Readout box the timer label goes in
         @FXML private VBox rootReadout;
-        @FXML private Label lblTimerReadout;
 
+        // The selected task from the vBoxTaskList's ListView
+        // That is running 
         private int indexOfRunningTask;
         
-        // The Task Timer Object
-        protected TimeCounter timer;
 
-        protected int rColor;
-        protected int gColor;
-        protected int bColor;
+
+
 
         
         // Controllers
@@ -69,15 +65,16 @@ public class MainController{
         // Controls the prompting and inputing of a user-specified task
         private AddTaskController addTaskController;
         
-  
+        // Controls the view and communicates with the datamodel 
+        // When a timer is running
+        private TimerReadoutController readoutController;
          
          
         public MainController(DataController dataController){
             storageController = new StorageController();
             this.dataController = dataController;
-            this.timer = new TimeCounter();
-            this.colorChanger = new ColorChanger();
             this.addTaskController = new AddTaskController();
+            this.readoutController = new TimerReadoutController();
         }
 
         
@@ -164,13 +161,19 @@ public class MainController{
         // Start Selected Task
         @FXML
         protected void startTask(ActionEvent event){
-            indexOfRunningTask = taskList.getSelectionModel().getSelectedIndex(); 
             
-            timer.startTimer(this);
-            
-            
-            
+            // Make sure a task is selected
+            if(taskList.getSelectionModel().getSelectedIndex() >= 0){
+                indexOfRunningTask = taskList.getSelectionModel().getSelectedIndex();
+                // Pass control
+
+                readoutController = new TimerReadoutController();
+                this.readoutController.startTimerTask(root, rootReadout, 
+                        indexOfRunningTask, dataController, this);
+            }
         }
+        
+        
         
         // Delete Selected Task
         @FXML
@@ -190,7 +193,7 @@ public class MainController{
                     System.out.println(e.toString());
 
                     // Revert to task list view
-                    revertFromTimerGUI();
+                    restoreRoot();
                 }
                 
             
@@ -207,7 +210,7 @@ public class MainController{
             dataController.removeTask(taskList.getSelectionModel().getSelectedIndex());
             
             // Revert to task list view
-            revertFromTimerGUI();
+            updateTaskList();
         }
         
         @FXML
@@ -230,107 +233,22 @@ public class MainController{
             System.exit(0);
         }
 
+
         
         
 
         
-
         
-
-        
-        
-        //  //  //
-        // TimerReadout //
-        //  //  //  //
-        
-        public void startTimerGUI(){
-            hideControls();
-            
-            root.setStyle("-fx-background-color: #000000");
-            
-            root.getChildren().clear();
-            
-            
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
-            
-            loader.setController(this);
-            
-            try{
-                rootReadout = loader.load();
-                
-                VBox vBox = rootReadout;
-                
-                
-                
-                lblTimerReadout.setText(LongToReadableTime.getReadableTime(timer.getTotalTime()));
-                
-                root.setCenter(vBox);
-                
-                colorChanger.startTimer(this);
-                
-            }catch(IOException e){
-                
-            }
+        // Cancels the current timer readout task(s)
+        public void cancelTasks(){
+            this.readoutController.cancelTimer();
+            this.readoutController = new TimerReadoutController();
         }
         
-        public void updateTimerReadout(){
-            
-          lblTimerReadout.setText(LongToReadableTime.getReadableTime(timer.getTotalTime()));
-            
-        }
         
-        public void endTimerReadout(){
-
-            // Stop and reset the color changer
-            colorChanger.cancelTimer();
-            colorChanger = new ColorChanger();
-            
-            // Stop timer
-            timer.cancelTimer();
-            
-            restoreRootPanes();
-            
-            
-
-            
-
-            dataController.getTaskRepo().getTasks().get(indexOfRunningTask).
-                    addTime(timer.getTotalTime());
-            
-            dataController.getTaskRepo().getTasks().get(indexOfRunningTask).setLastRun(
-                timer.startDate);
-            
-            indexOfRunningTask = 0;
-            
-            // Reset the timer
-            timer = new TimeCounter();
-            
-            revertFromTimerGUI();
-                        
-            
-        }
         
-        public void setReadoutBackground(String colorSequence){
-            this.rootReadout.setStyle(colorSequence);
-        }
-        
-        @FXML
-        protected void stopTimer(ActionEvent event){
-            endTimerReadout();
-            
-            
-        }
-
-        public void revertFromTimerGUI(){
-            rColor = 0;
-            gColor = 0;
-            bColor = 0;
-
-            restoreRoot();
-            
-
-        }
+        // Root Pane Controlls //
+        //  //  //  //  //  //  //
         
         private void showControls(){
             btnFileMenu.setVisible(true);
@@ -343,22 +261,17 @@ public class MainController{
 
         }
         
-        private void hideControls(){
-            
-                        
+        private void hideControls(){   
             btnFileMenu.setVisible(false);
             btnAddTask.setVisible(false);
             btnDelete.setVisible(false);
             btnEditTime.setVisible(false);
             btnStart.setVisible(false);
             btnClose.setVisible(false);
-  
-
         }
         
         
-
-        
+        // Updates the main fxml view task list (the listview)
         private void updateTaskList(){
             if(dataController.getTaskRepo() != null)
             {
@@ -387,29 +300,6 @@ public class MainController{
             
         }
         
-        
-        // Cancels the current timer task and the color changer task
-        public void cancelTasks(){
-            this.colorChanger.cancelTimer();
-            this.timer.cancelTimer();         
-            
-            
-            timer = new TimeCounter();
-            colorChanger = new ColorChanger();
-        }
-        
-        
-        
-        // Root Pane Controlls //
-        //  //  //  //  //  //  //
-        
-        // Clears the root border pane
-        protected void clearRoot(){
-            this.root.getChildren().clear();
-            
-            
-        }
-        
         // Restores the root border pane to default
         protected void restoreRoot(){
             root.setStyle("-fx-background-color: #ffffff");
@@ -419,6 +309,12 @@ public class MainController{
             showControls();
         }
         
+        // Clears the root border pane
+        protected void clearRoot(){
+            this.root.getChildren().clear();
+ 
+        }
+    
         protected void restoreRootPanes(){
             root.setTop(hBoxTop);
             root.setCenter(vBoxTaskList);
@@ -428,11 +324,5 @@ public class MainController{
         protected void setRootCenter(VBox rootCenter){
             this.root.setCenter(rootCenter);
         }
-        
-        
 
-        
-        
-        
-        
 }

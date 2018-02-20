@@ -22,9 +22,9 @@ public class TimeCounter extends TimerTask{
     protected long totalTime;
     
     
-    protected MainController controller;
+    protected TimerReadoutController controller;
     
-    public void startTimer(MainController controller){
+    public void startTimer(TimerReadoutController controller){
         
         this.controller = controller;
         
@@ -40,8 +40,6 @@ public class TimeCounter extends TimerTask{
         //set the last run date/time to now as the timer is now running
         lastRunDate = new Date();
         lastRunDate.setTime(new Date().getTime());
-        
-        this.controller.startTimerGUI();
 
     }
     
@@ -56,7 +54,7 @@ public class TimeCounter extends TimerTask{
 
             //timer readout every second
 
-            controller.updateTimerReadout();
+            controller.updateReadoutGUI();
 
 
 
@@ -64,7 +62,7 @@ public class TimeCounter extends TimerTask{
             if(timeDifference >= 1_000){
                 this.totalTime += 1_000;
 
-                controller.updateTimerReadout();
+                controller.updateReadoutGUI();
                 //set lastRunDate to now so that the timeDifference will count 
                 //from 0 to 60,000 again
                 this.lastRunDate.setTime(new Date().getTime());
