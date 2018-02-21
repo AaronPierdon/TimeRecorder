@@ -152,7 +152,9 @@ public class MainController{
         // Edit a Selected Task
         @FXML
         protected void editTask(ActionEvent event){
-            System.out.println(dataController.getTaskRepo().getTasks().get(0).getName());
+            EditTaskController editorController = new EditTaskController();
+            
+            editorController.editTask(0, root, dataController);
         }
 
         
