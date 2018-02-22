@@ -353,7 +353,7 @@ public class MainController extends TimerTask{
             //When the controlcontroller is active and such hasn't been reflected by this.editingTask
             if(editTaskController.getState() && this.editingTask == false){
                 miliime = System.currentTimeMillis() - miliime;
-                System.out.println(LongToReadableTime.getReadableTime(miliime));
+                System.out.println(miliime);
                 clearRoot();
                 root.setCenter(editTaskController.getEditView());
                 editingTask = true;
