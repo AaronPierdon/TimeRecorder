@@ -8,6 +8,9 @@ package timerecorder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,9 +28,9 @@ import timerecorderdatamodel.Task;
 import utility.io.parse.LongToReadableTime;
 
 
-public class MainController{
+public class MainController extends TimerTask{
     
- 
+        long miliime;
     
         // Main GUI elements that need to be altered or used
         @FXML private Button  btnAddTask, btnEditTime,
@@ -49,7 +52,7 @@ public class MainController{
         // That is running 
         private int indexOfRunningTask;
         
-
+        private boolean editingTask;
 
 
 
@@ -68,6 +71,9 @@ public class MainController{
         // Controls the view and communicates with the datamodel 
         // When a timer is running
         private TimerReadoutController readoutController;
+        
+        // 
+        private EditTaskController editTaskController;
          
          
         public MainController(DataController dataController){
@@ -75,6 +81,13 @@ public class MainController{
             this.dataController = dataController;
             this.addTaskController = new AddTaskController();
             this.readoutController = new TimerReadoutController();
+            this.editTaskController = new EditTaskController();
+            
+            // Set states
+            editingTask = false;
+            
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(this, 0, 500);
         }
 
         
@@ -152,9 +165,11 @@ public class MainController{
         // Edit a Selected Task
         @FXML
         protected void editTask(ActionEvent event){
-            EditTaskController editorController = new EditTaskController();
+            miliime = System.currentTimeMillis();
+            editTaskController = new EditTaskController();
             
-            editorController.editTask(0, root, dataController);
+
+            editTaskController.startEditing();
         }
 
         
@@ -180,6 +195,8 @@ public class MainController{
         // Delete Selected Task
         @FXML
         protected void deleteTask(ActionEvent event){
+            
+            
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
             
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeleteConfirmPane.fxml"));
@@ -245,6 +262,7 @@ public class MainController{
         public void cancelTasks(){
             this.readoutController.cancelTimer();
             this.readoutController = new TimerReadoutController();
+            this.cancel();
         }
         
         
@@ -326,5 +344,28 @@ public class MainController{
         protected void setRootCenter(VBox rootCenter){
             this.root.setCenter(rootCenter);
         }
+
+    @Override
+    public void run() {
+        
+        Platform.runLater(() -> {
+            
+            //When the controlcontroller is active and such hasn't been reflected by this.editingTask
+            if(editTaskController.getState() && this.editingTask == false){
+                miliime = System.currentTimeMillis() - miliime;
+                System.out.println(LongToReadableTime.getReadableTime(miliime));
+                clearRoot();
+                root.setCenter(editTaskController.getEditView());
+                editingTask = true;
+
+            //When the controlcontroller is not active and such hasn't been reflected by this.editingTask
+            } else if(!this.editTaskController.getState() && this.editingTask == true) {
+                editingTask = false;
+                this.editTaskController = new EditTaskController();
+                restoreRoot();
+            }
+        });
+
+    }
 
 }
