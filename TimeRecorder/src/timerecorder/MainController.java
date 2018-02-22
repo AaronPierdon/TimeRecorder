@@ -165,11 +165,27 @@ public class MainController extends TimerTask{
         // Edit a Selected Task
         @FXML
         protected void editTask(ActionEvent event){
-            miliime = System.currentTimeMillis();
-            editTaskController = new EditTaskController();
             
+            if(taskList.getSelectionModel().getSelectedIndex() >= 0){
+                
+                
+                editTaskController = new EditTaskController();
+                clearRoot();
+                buildEditingView();
+                
+                // Get selected task and pass it to the editor controller
+                Task selectedTask = this.dataController.taskRepo.getTasks().
+                        get(this.taskList.getSelectionModel().getSelectedIndex());
+                
+                editTaskController.startEditing(selectedTask);
+            }
 
-            editTaskController.startEditing();
+        }
+        
+        private void buildEditingView(){
+                root.setCenter(editTaskController.getEditView());
+                editTaskController.setEditing(true);
+                editingTask = true;
         }
 
         
@@ -300,7 +316,7 @@ public class MainController extends TimerTask{
                 for(Task task : dataController.getTaskRepo().getTasks())
                     list.add(task.getName() + "\r\n" +
                             "Last Run: " + task.getLastRun() + "\r\n" +
-                            "Total Time: " + LongToReadableTime.getReadableTime(task.getTime()));
+                            "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
 
                 
                 ObservableList<String> items = FXCollections.observableArrayList();
@@ -351,16 +367,21 @@ public class MainController extends TimerTask{
         Platform.runLater(() -> {
             
             //When the controlcontroller is active and such hasn't been reflected by this.editingTask
-            if(editTaskController.getState() && this.editingTask == false){
-                miliime = System.currentTimeMillis() - miliime;
-                System.out.println(miliime);
-                clearRoot();
-                root.setCenter(editTaskController.getEditView());
-                editingTask = true;
-
-            //When the controlcontroller is not active and such hasn't been reflected by this.editingTask
-            } else if(!this.editTaskController.getState() && this.editingTask == true) {
+            if(!this.editTaskController.getState() && this.editingTask == true) {
                 editingTask = false;
+                
+                
+                // Get the edited task and update the data model if the task controller
+                // has the state of true for confirmed instead of false for a cancel action
+                if(this.editTaskController.getConfirmedStatus()){
+                    dataController.getTaskRepo().getTasks().get(
+                        taskList.getSelectionModel().getSelectedIndex()).updateProperties(
+                        this.editTaskController.getEditedTask());
+                    
+                    
+                }
+                
+                
                 this.editTaskController = new EditTaskController();
                 restoreRoot();
             }

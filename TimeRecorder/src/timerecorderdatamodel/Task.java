@@ -50,6 +50,12 @@ public class Task implements Serializable{
         this.totalTime = 0;
     }
     
+    public void updateProperties(Task task){
+        this.lastRunDate = task.getLastRun();
+        this.taskName = task.getName();
+        this.totalTime = task.getTotalTime();
+        this.creationDate = task.creationDate;
+    }
     
     // Main AddTime Method, accepts a long
     public void addTime(long time){
@@ -104,7 +110,7 @@ public class Task implements Serializable{
         this.taskName = name;
     }
     
-    public long getTime(){
+    public long getTotalTime(){
         return this.totalTime;
     }
     
@@ -114,6 +120,10 @@ public class Task implements Serializable{
     
     public void setLastRun(Date date){
         this.lastRunDate = date;
+    }
+    
+    public void setTotalTime(long time){
+        this.totalTime = time;
     }
     
     
