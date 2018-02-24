@@ -1,0 +1,58 @@
+/*
+Developers: Aaron Pierdon
+Date: Feb 24, 2018
+Description :
+
+*/
+/* 
+    Created on : Feb 24, 2018, 8:49:17 AM
+    Author     : Aaron
+*/
+
+
+.button{
+    -fx-background-color: derive(#136e05, 10%);
+    -fx-text-fill: derive(#ffffff, 18%);
+    
+}
+
+
+
+.list-view{
+    
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+
+.list-cell{
+    -fx-background-color: derive(#000000, 30%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+
+.text-field{
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    
+}
+
+
+
+#root{
+    -fx-background-color: derive(#000000, 80%);
+    
+}
+
+#vBoxTaskList{
+    -fx-background-color: derive(#4d634a, 20%);
+    
+}
+
+#vBoxRight{
+      -fx-background-color: derive(#4d634a, 20%);
+
+}
+
+#hBoxTop{
+      -fx-background-color: derive(#4d634a, 20%);
+     
+}

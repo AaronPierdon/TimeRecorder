@@ -6,6 +6,7 @@
 package timerecorder;
 
 import java.io.File;
+import java.net.URL;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -57,7 +58,9 @@ public class TimeRecorder extends Application {
         
         
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimeRecorderMainFXML.fxml"));
-
+        BorderPane root = new BorderPane();
+       
+        root.getStylesheets().add(getClass().getResource("stylesheet.css").toString()); 
         theStage = stage;
         
         closer = new Closer();
@@ -69,14 +72,19 @@ public class TimeRecorder extends Application {
         timeRecorderFXMLController = new MainController(this.dataController);
         fxmlLoader.setController(timeRecorderFXMLController);
         
-        BorderPane root = fxmlLoader.load();
+        
+        root = fxmlLoader.load();
         
         theStage = stage;
         
 
         Scene scene = new Scene(root);
+
+
+        
         
         stage.setScene(scene);
+                
         stage.show();
     }
 

@@ -88,6 +88,8 @@ public class MainController extends TimerTask{
             
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(this, 0, 500);
+            
+            
         }
 
         
@@ -325,12 +327,11 @@ public class MainController extends TimerTask{
 
                 taskList.setItems(items);
 
-                taskList.setPrefWidth(100);
-                taskList.setPrefHeight(70);
                 
 
-                this.vBoxTaskList.getChildren().clear();
-                this.vBoxTaskList.getChildren().add(taskList);
+
+
+                
             }
 
             
@@ -338,7 +339,6 @@ public class MainController extends TimerTask{
         
         // Restores the root border pane to default
         protected void restoreRoot(){
-            root.setStyle("-fx-background-color: #ffffff");
             clearRoot();
             restoreRootPanes();
             updateTaskList();

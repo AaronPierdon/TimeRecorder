@@ -81,7 +81,6 @@ public class TimerReadoutController extends TimerTask{
             
             lblTimerReadout.setText("00:00:00");
             root.setCenter(rootReadout);
-            root.setStyle("-fx-background-color: #000000");
             
             
         }catch(IOException e){
