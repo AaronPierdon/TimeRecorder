@@ -21,9 +21,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import timerecorderdatamodel.Task;
 import utility.io.parse.LongToReadableTime;
 
@@ -341,7 +343,7 @@ public class MainController extends TimerTask{
         protected void restoreRoot(){
             clearRoot();
             restoreRootPanes();
-            updateTaskList();
+            updateTaskList(); 
             showControls();
         }
         
