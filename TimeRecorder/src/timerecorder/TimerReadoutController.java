@@ -102,10 +102,8 @@ public class TimerReadoutController extends TimerTask{
     
     protected void endTimerReadout(){
         dataController.getTaskRepo().getTasks().get(indexOfRunningTask).
-            addTime(timeCounter.getTotalTime());
-        
-        dataController.getTaskRepo().getTasks().get(indexOfRunningTask).setLastRun(
-            timeCounter.startDate);
+            addSession(timeCounter.getTotalTime());
+
         
    
         

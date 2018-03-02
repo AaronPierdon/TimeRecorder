@@ -5,11 +5,19 @@
  */
 package timerecorderdatamodel;
 
+import java.awt.Desktop.Action;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeMap;
 import utility.io.console.PositionedConsoleOutput;
 import utility.io.getAnswer.GetMenuSelection;
+import utility.io.parse.LongToReadableTime;
 import utility.io.parse.TimeConverter;
 
 /**
@@ -18,12 +26,19 @@ import utility.io.parse.TimeConverter;
  */
 public class Task implements Serializable{
     
+    // New Array list of start times and array list of length... maybe map keyvalue with start time in milli and a milli for length
     
-    protected String taskName;
-    protected Date creationDate;
-    protected Date lastRunDate;
-    protected long totalTime;
+    // Should be impossible for a task to have same start time with same length until we add concurrent tasks
     
+    private String taskName;
+    private Date creationDate;
+    private long totalTime;
+    
+    // Keeps track of the Time Performed Task Started as milliseconds since epoch and
+    // Length of time in milliseconds it was performed.
+    private HashMap<Long, Long> sessions;
+    
+   
     //
     // Constructors
     //
@@ -31,13 +46,13 @@ public class Task implements Serializable{
     public Task(){
         this.taskName = "Unkown Task";
         this.creationDate = new Date();
-        this.lastRunDate = null;
+        this.sessions = new HashMap<>();
         this.totalTime = 0;
     }
     public Task(String name){
         this.taskName = name;
         this.creationDate = new Date();
-        this.lastRunDate = null;
+        this.sessions = new HashMap<>();
         this.totalTime = 0;
     }
     
@@ -46,61 +61,68 @@ public class Task implements Serializable{
     // Clears the member variables except the name
     public void clear(){
         this.creationDate = new Date();
-        this.lastRunDate = null;
         this.totalTime = 0;
+        this.sessions = new HashMap<>();
     }
     
-    public void updateProperties(Task task){
-        this.lastRunDate = task.getLastRun();
-        this.taskName = task.getName();
-        this.totalTime = task.getTotalTime();
+    public void setTask(Task task){
+        this.taskName = task.taskName;
+        this.totalTime = task.totalTime;
         this.creationDate = task.creationDate;
+        this.sessions = task.sessions;
+    }
+    
+    private void updaterProperties(){
+        
     }
     
     // Main AddTime Method, accepts a long
+    public void addSession(long time){
+        // Increment total time by
+        this.totalTime += time;
+        
+        // Record the date and time of now
+        long date = System.currentTimeMillis();
+        
+        // Record the date and time of now along with the length of the task that was 
+        // Added now
+        this.sessions.put(date, time);
+  
+    }
+    
     public void addTime(long time){
         this.totalTime += time;
+        
+        // Get the value for the key 0
+        long key = 0;
+        long currentUnorganizedTime = 0;
+        
+        if(this.sessions.get(key) != null && !this.sessions.isEmpty())
+            currentUnorganizedTime = this.sessions.get(key);
+        
+        // Add the added time to the currentUnorganizedTime and put in the
+        // key 0
+        this.sessions.put(key, (time + currentUnorganizedTime));
+        
     }
     
-    // Can be called via console.. to be depcreciated
-    public void addTimeViaConsole(){
-        
-        System.out.println("What time of increment would you like to add?");
-        int choice = addTimeTypeQuery();
-        switch(choice){
-            case 1: this.totalTime += (this.addTimeQuery() * 1000);
-                break;
-            case 2: this.totalTime += (new TimeConverter().minutesToSeconds(
-                        this.addTimeQuery()) * 1000);
-                break;
-            case 3: this.totalTime += (new TimeConverter().hoursToSeconds(
-                        this.addTimeQuery()) * 1000);
-                break;
-            default: System.out.println("Shouldn't be here...");
-            
-        }
+    // Set this.sessions to one that is sorted by key, the time of occurrence
+    public  void sortByRecent(){
+         Map.Entry newEntry;
+         Map<Long, Long> map = new TreeMap<Long, Long>(this.sessions);
+         Set set2 = map.entrySet();
+         Iterator iterator2 = set2.iterator();
+         this.sessions.clear();
+         while(iterator2.hasNext()) {
+              newEntry = (Map.Entry)iterator2.next();
+              this.sessions.put((long) newEntry.getKey(), (long) newEntry.getValue());
+
+         }
+
     }
+
     
-    // Called from addTimeViaConsole()
-    private int addTimeTypeQuery(){
-        PositionedConsoleOutput conOut = new PositionedConsoleOutput();
-        conOut.clearDisplay();
-        System.out.println("1| Seconds");
-        System.out.println("2| Minutes");
-        System.out.println("3| Hours");
-        System.out.println("4| Cancel");
-        
-        return GetMenuSelection.getMenuSelection(1, 4);
-        
-    }
-    // Called from addTimeViaConsole()
-    private int addTimeQuery(){
-        PositionedConsoleOutput conOut = new PositionedConsoleOutput();
-        conOut.clearDisplay();
-        System.out.println("How much time to add?");
-        
-        return new Scanner(System.in).nextInt();
-    }
+
     
     public String getName(){
         return this.taskName;
@@ -114,19 +136,26 @@ public class Task implements Serializable{
         return this.totalTime;
     }
     
-    public Date getLastRun(){
-        return this.lastRunDate;
-    }
-    
-    public void setLastRun(Date date){
-        this.lastRunDate = date;
-    }
+
     
     public void setTotalTime(long time){
+        
         this.totalTime = time;
     }
     
-    
+    public long getLastRunDate(){
+        Long latestSession = new Long(0);
+        
+        for(Long sessionDate : this.sessions.keySet()){
+            if(latestSession == 0)
+                latestSession = sessionDate;
+            // SessionDate is later in time than latest, so update
+            if(latestSession < sessionDate)
+                latestSession = sessionDate;
+        }
+        
+        return latestSession;
+    }
     
    
     

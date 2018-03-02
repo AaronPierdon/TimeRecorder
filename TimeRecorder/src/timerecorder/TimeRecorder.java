@@ -76,6 +76,7 @@ public class TimeRecorder extends Application {
         root = fxmlLoader.load();
         
         theStage = stage;
+        stage.setAlwaysOnTop(true);
         
 
         Scene scene = new Scene(root);

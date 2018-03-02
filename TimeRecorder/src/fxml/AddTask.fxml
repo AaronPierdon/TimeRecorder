@@ -15,12 +15,24 @@
       </TextField>
       <HBox alignment="CENTER" prefHeight="26.0" prefWidth="175.0" stylesheets="@../timerecorder/stylesheet.css">
          <children>
-            <Button id="btnAddTaskInput" fx:id="btnAddTaskInput" mnemonicParsing="false" onAction="#addTaskInput" text="Add Task">
-               <HBox.margin>
-                  <Insets right="15.0" />
-               </HBox.margin>
-            </Button>
-            <Button id="btnCancelAddTask" fx:id="btnCancelAddTask" mnemonicParsing="false" onAction="#cancelAddTask" text="Cancel" />
+            <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button id="btnAddTaskInput" fx:id="btnAddTaskInput" mnemonicParsing="false" onAction="#addTaskInput" text="Add Task">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button id="btnCancelAddTask" fx:id="btnCancelAddTask" mnemonicParsing="false" onAction="#cancelAddTask" text="Cancel">
+                     <HBox.margin>
+                        <Insets right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </HBox>
    </children>

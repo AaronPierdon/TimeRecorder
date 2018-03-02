@@ -8,6 +8,7 @@ package timerecorder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
@@ -25,7 +26,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import timerecorderdatamodel.Task;
 import utility.io.parse.LongToReadableTime;
 
@@ -316,10 +316,9 @@ public class MainController extends TimerTask{
             if(dataController.getTaskRepo() != null)
             {
                 ArrayList<String> list = new ArrayList<>();
-
                 for(Task task : dataController.getTaskRepo().getTasks())
                     list.add(task.getName() + "\r\n" +
-                            "Last Run: " + task.getLastRun() + "\r\n" +
+                            "Last Run: " + new Date(task.getLastRunDate()) + "\r\n" +
                             "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
 
                 
@@ -328,8 +327,6 @@ public class MainController extends TimerTask{
                 items.setAll(list);
 
                 taskList.setItems(items);
-
-                
 
 
 
@@ -377,7 +374,7 @@ public class MainController extends TimerTask{
                 // has the state of true for confirmed instead of false for a cancel action
                 if(this.editTaskController.getConfirmedStatus()){
                     dataController.getTaskRepo().getTasks().get(
-                        taskList.getSelectionModel().getSelectedIndex()).updateProperties(
+                        taskList.getSelectionModel().getSelectedIndex()).setTask(
                         this.editTaskController.getEditedTask());
                     
                     

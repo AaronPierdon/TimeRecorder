@@ -87,13 +87,8 @@ public class EditTaskController {
     
 
     public void loadTaskValues(){
-        
-        txtSeconds.setText(Integer.toString((int) (editedTask.getTotalTime() / 1000) % 60));
-        txtMinutes.setText(Integer.toString((int) (editedTask.getTotalTime() / (1000 * 60)) % 60));
-        txtHours.setText(Integer.toString((int) (editedTask.getTotalTime() / (1000 * 60 * 60))));
         txtNameInput.setText(editedTask.getName());
-        
-        
+
     }
     
     public void stopediting(){
@@ -117,12 +112,12 @@ public class EditTaskController {
     protected void confirmEdit(ActionEvent event){
         
         
+        
         try{
             long taskTimeInMilli = (long) 1000 * ((Integer.valueOf(txtSeconds.getText())) + 
                 (Integer.valueOf(txtMinutes.getText()) * 60) +
                 (Integer.valueOf(txtHours.getText()) * 60 * 60));
-            System.out.println(taskTimeInMilli);
-            editedTask.setTotalTime(taskTimeInMilli);
+            editedTask.addTime(taskTimeInMilli);
 
             // Ends editing
             confirmedStatus = true;

@@ -14,7 +14,8 @@ Description :
     -fx-background-color: derive(#000000, 30%);
     -fx-text-fill: derive(#3ee028, 35%);
     
-    
+    -fx-border-color: derive(#002100,  21%);
+    -fx-border-insets: 2, 2, 2, 2;
 }
 
 
