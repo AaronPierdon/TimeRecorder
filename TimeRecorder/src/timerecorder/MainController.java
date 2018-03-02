@@ -140,15 +140,13 @@ public class MainController extends TimerTask{
         protected void addTask(ActionEvent event){
             // Alter GUI for input 
             // Control is now passed to user for task name input
-            addTaskController.startTask(this);
+            addTaskController.startAddTask(this);
   
         }
         
         // Used when control needs to be passed from AddTaskController object
         // To this
         protected void endAddNewTask(){
-            
-            addTaskController.cancel();
             addTaskController = new AddTaskController();
             
             // Revert to task list view
@@ -315,10 +313,13 @@ public class MainController extends TimerTask{
         private void updateTaskList(){
             if(dataController.getTaskRepo() != null)
             {
+                
+                // Sort the list
+                dataController.getTaskRepo().sortByRecent();
                 ArrayList<String> list = new ArrayList<>();
                 for(Task task : dataController.getTaskRepo().getTasks())
                     list.add(task.getName() + "\r\n" +
-                            "Last Run: " + new Date(task.getLastRunDate()) + "\r\n" +
+                            "Last Run: " + new Date(task.getLastRun().getTime()) + "\r\n" +
                             "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
 
                 

@@ -17,13 +17,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
 
-public class AddTaskController extends TimerTask{
+public class AddTaskController{
             
             private MainController controller;
             
             @FXML TextField txtTaskInput;
             
-            public void startTask(MainController controller){
+            public void startAddTask(MainController controller){
                 this.controller = controller;
                 
                 // Set up GUI
@@ -58,15 +58,6 @@ public class AddTaskController extends TimerTask{
             
             
 
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    
-                    Timer timer = new Timer();
-                    
-                    timer.scheduleAtFixedRate(this, 0, 250);
-                });
-            }
             
             @FXML
             protected void addTaskInput(ActionEvent event){

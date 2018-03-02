@@ -32,7 +32,10 @@ public class Task implements Serializable{
     
     private String taskName;
     private Date creationDate;
+    private Date lastRun;
+
     private long totalTime;
+    
     
     // Keeps track of the Time Performed Task Started as milliseconds since epoch and
     // Length of time in milliseconds it was performed.
@@ -46,12 +49,14 @@ public class Task implements Serializable{
     public Task(){
         this.taskName = "Unkown Task";
         this.creationDate = new Date();
+        this.lastRun = new Date();
         this.sessions = new HashMap<>();
         this.totalTime = 0;
     }
     public Task(String name){
         this.taskName = name;
         this.creationDate = new Date();
+        this.lastRun = new Date();
         this.sessions = new HashMap<>();
         this.totalTime = 0;
     }
@@ -61,6 +66,7 @@ public class Task implements Serializable{
     // Clears the member variables except the name
     public void clear(){
         this.creationDate = new Date();
+        this.lastRun = new Date();
         this.totalTime = 0;
         this.sessions = new HashMap<>();
     }
@@ -69,12 +75,11 @@ public class Task implements Serializable{
         this.taskName = task.taskName;
         this.totalTime = task.totalTime;
         this.creationDate = task.creationDate;
+        this.lastRun = task.lastRun;
         this.sessions = task.sessions;
     }
     
-    private void updaterProperties(){
-        
-    }
+
     
     // Main AddTime Method, accepts a long
     public void addSession(long time){
@@ -87,6 +92,7 @@ public class Task implements Serializable{
         // Record the date and time of now along with the length of the task that was 
         // Added now
         this.sessions.put(date, time);
+        this.lastRun = new Date(date);
   
     }
     
@@ -104,10 +110,12 @@ public class Task implements Serializable{
         // key 0
         this.sessions.put(key, (time + currentUnorganizedTime));
         
+        this.lastRun = new Date(System.currentTimeMillis());
+        
     }
     
     // Set this.sessions to one that is sorted by key, the time of occurrence
-    public  void sortByRecent(){
+    public void sortByRecent(){
          Map.Entry newEntry;
          Map<Long, Long> map = new TreeMap<Long, Long>(this.sessions);
          Set set2 = map.entrySet();
@@ -132,6 +140,15 @@ public class Task implements Serializable{
         this.taskName = name;
     }
     
+    
+public void setLastRun(Date lastRun) {
+        this.lastRun = lastRun;
+    }
+
+    public Date getLastRun() {
+        return lastRun;
+    }
+    
     public long getTotalTime(){
         return this.totalTime;
     }
@@ -142,22 +159,7 @@ public class Task implements Serializable{
         
         this.totalTime = time;
     }
-    
-    public long getLastRunDate(){
-        Long latestSession = new Long(0);
-        
-        for(Long sessionDate : this.sessions.keySet()){
-            if(latestSession == 0)
-                latestSession = sessionDate;
-            // SessionDate is later in time than latest, so update
-            if(latestSession < sessionDate)
-                latestSession = sessionDate;
-        }
-        
-        return latestSession;
-    }
-    
-   
+
     
     
 }

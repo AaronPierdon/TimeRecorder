@@ -7,6 +7,10 @@ package timerecorderdatamodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 
 
@@ -37,6 +41,23 @@ public class TaskRepository implements Serializable{
     
     public void setTasks(ArrayList<Task> tasks){
         this.tasks = tasks;
+    }
+    
+    public void sortByRecent(){
+
+        
+       for(int i = 0; i < this.tasks.size(); i++){
+           for(int j = 0; j < this.tasks.size() - i - 1; j++){
+               if(this.tasks.get(j).getLastRun().getTime() < this.tasks.get(j + 1).getLastRun().getTime()){
+                   Task temp = new Task();
+                   temp.setTask(this.tasks.get(j));
+                   this.tasks.get(j).setTask(this.tasks.get(j + 1));
+                   this.tasks.get(j+1).setTask(temp);
+               }
+           }
+       }
+
+        
     }
 
 }
