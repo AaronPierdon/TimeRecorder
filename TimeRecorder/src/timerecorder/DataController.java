@@ -26,7 +26,10 @@ public class DataController {
     
     // Getters and Setters
     public void setTaskRepo(TaskRepository tasks) {
-        this.taskRepo = tasks;
+        if(tasks != null)
+            this.taskRepo = tasks;
+        else
+            this.taskRepo = new TaskRepository();
     }
 
     public TaskRepository getTaskRepo() {

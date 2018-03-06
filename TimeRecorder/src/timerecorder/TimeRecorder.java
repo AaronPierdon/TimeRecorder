@@ -6,12 +6,14 @@
 package timerecorder;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -28,9 +30,10 @@ public class TimeRecorder extends Application {
     
     // Used for creating a file chooser
     public static Stage theStage;
+    private static Scene theScene;
     
     
-    private FXMLLoader fxmlLoader;
+    private static FXMLLoader fxmlLoader;
     
     // Requests changes in views, passes control to other controllers
     private MainController timeRecorderFXMLController;
@@ -55,41 +58,78 @@ public class TimeRecorder extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
-        
-        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimeRecorderMainFXML.fxml"));
-        BorderPane root = new BorderPane();
-       
-        root.getStylesheets().add(getClass().getResource("stylesheet.css").toString()); 
         theStage = stage;
-        
         closer = new Closer();
-        
         stage.setOnCloseRequest(closer);
         
-        // Give the main controller a dataController so main can pass control to
-        // Data Controller when the data model needs to be managed.
-        timeRecorderFXMLController = new MainController(this.dataController);
-        fxmlLoader.setController(timeRecorderFXMLController);
+ 
         
         
-        root = fxmlLoader.load();
         
-        theStage = stage;
+        
+        
+        
+
+        
+        
+        
+        
         stage.setAlwaysOnTop(true);
         
 
-        Scene scene = new Scene(root);
-
+       
 
         
         
-        stage.setScene(scene);
+        this.setMainScene();
                 
         stage.show();
     }
 
-   
+    public  void setMainScene(){
+        
+
+        
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimeRecorderMainFXML.fxml"));
+        BorderPane root = new BorderPane();
+       
+        root.getStylesheets().add(getClass().getResource("stylesheet.css").toString());
+        
+            // Give the main controller a dataController so main can pass control to
+        // Data Controller when the data model needs to be managed.
+        timeRecorderFXMLController = new MainController(this.dataController);
+        fxmlLoader.setController(timeRecorderFXMLController);
+        
+        try{
+            root = fxmlLoader.load();
+            
+        }catch(IOException e){
+        
+        }
+        
+        theScene = new Scene(root);
+        
+        theStage.setScene(theScene);
+    }
+    
+    public void setReadoutScene(){
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
+        VBox root = new VBox();
+        root.getStylesheets().add(getClass().getResource("stylesheet.css").toString());
+        
+        fxmlLoader.setController(timeRecorderFXMLController);
+        
+        try{
+            root = fxmlLoader.load();
+            
+        }catch(IOException e){
+        
+        }
+        
+        theScene = new Scene(root);
+        
+        theStage.setScene(theScene);
+    }
 
     public static void main(String[] args) {
         launch(args);

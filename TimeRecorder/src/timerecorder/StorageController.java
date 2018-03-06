@@ -30,7 +30,6 @@ public class StorageController {
             
             // File exists, try to deserialize into a TaskRepository object
             TaskRepository temp = (TaskRepository) Serializer.deserialize(file);
-            
             if(temp != null){
                  this.lastSavedFile = file;
                 return temp;

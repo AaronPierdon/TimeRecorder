@@ -8,12 +8,10 @@ package timerecorder;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
 
 
 // Color Changer
-public class ColorChanger extends TimerTask{
+public class ColorChanger{
 
 
 
@@ -21,31 +19,23 @@ public class ColorChanger extends TimerTask{
     private int green;
     private int blue;
     private boolean up;
-    @FXML protected VBox rootReadout;
+    private String style;
 
 
-    public void startTimer(VBox rootReadout){
 
-        this.rootReadout = rootReadout;
-
+    public ColorChanger(){
         red = 58;
         green = 110;
         blue = 21;
-
+        
         up = true;
-
-
-        Timer timer = new Timer();
-
-        timer.scheduleAtFixedRate(this, 0, 60);
+        style = "-fx-background-color: black;";
     }
+    
 
-    @Override
-    public void run(){
-
-
-        Platform.runLater(() -> {
-
+    
+    protected void shiftColors(){
+            
 
             if(up == true){
                 red++;
@@ -72,15 +62,15 @@ public class ColorChanger extends TimerTask{
                     red + ", " + green + ", " + blue +")";
 
             
-            rootReadout.setStyle(colorSequence);
+            this.style = colorSequence;
 
 
-        });
-
+    }
+    
+    protected String getColorSequence(){
+        this.shiftColors();
+        return this.style;
     }
 
 
-    public void cancelTimer(){
-        this.cancel();
-    }
 }

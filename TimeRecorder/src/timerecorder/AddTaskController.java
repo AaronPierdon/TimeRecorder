@@ -19,21 +19,43 @@ import timerecorderdatamodel.Task;
 
 public class AddTaskController{
             
-            private MainController controller;
-            
             @FXML TextField txtTaskInput;
+            @FXML VBox rootAddView;
             
-            public void startAddTask(MainController controller){
-                this.controller = controller;
-                
-                // Set up GUI
-                controller.clearRoot();
-                controller.setRootCenter(getEntryView());
+            private Task newTask;
+            private boolean isAdding;
+
+    public void setIsAdding(boolean isAdding) {
+        this.isAdding = isAdding;
+    }
+
+    public void setConfirmedInput(boolean confirmedInput) {
+        this.confirmedInput = confirmedInput;
+    }
+
+    public boolean isIsAdding() {
+        return isAdding;
+    }
+
+    public boolean isConfirmedInput() {
+        return confirmedInput;
+    }
+            
+            // Did user confirm or cancel the input 
+            private boolean confirmedInput;
+            
+            public AddTaskController(){
+                confirmedInput = false;
+                isAdding = false;
+            }
+            public void startAddTask(){
+                isAdding = true;
+
                 
             }
             
             
-            private VBox getEntryView(){
+            protected VBox getEntryView(){
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTask.fxml"));
                 loader.setController(this);
                 
@@ -56,24 +78,26 @@ public class AddTaskController{
                 }
             }
             
-            
+            protected Task getNewTask(){
+                return this.newTask;
+            }
 
             
             @FXML
             protected void addTaskInput(ActionEvent event){
-
+                    
                 // Create task and add it to the model
-                Task task = new Task(txtTaskInput.getText());
-
-
-                controller.addNewTask(task);
-                controller.endAddNewTask();
+                this.newTask = new Task(txtTaskInput.getText());
+                this.confirmedInput = true;
+                this.isAdding = false;
+                
 
             }
             
             @FXML
             protected void cancelAddTask(ActionEvent event){
-                controller.endAddNewTask();
+                this.confirmedInput = false;
+                this.isAdding = false;
             }
         }
         

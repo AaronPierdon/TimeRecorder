@@ -141,11 +141,7 @@ public class EditTaskController {
         editingTask = false;
     }
     
-    @FXML
-    protected void test(ActionEvent event){
-        
-        System.out.println("test");
-    }
+
 
     
  

@@ -27,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import timerecorderdatamodel.Task;
+import timerecorderdatamodel.TaskRepository;
 import utility.io.parse.LongToReadableTime;
 
 
@@ -48,13 +49,17 @@ public class MainController extends TimerTask{
         @FXML private ListView taskList;
         
         // Timer Readout box the timer label goes in
-        @FXML private VBox rootReadout;
+
 
         // The selected task from the vBoxTaskList's ListView
         // That is running 
         private int indexOfRunningTask;
         
         private boolean editingTask;
+        
+        private boolean isAddingTask;
+        
+        private boolean isViewUpdating;
 
 
 
@@ -73,9 +78,10 @@ public class MainController extends TimerTask{
         // Controls the view and communicates with the datamodel 
         // When a timer is running
         private TimerReadoutController readoutController;
-        
+
         // 
         private EditTaskController editTaskController;
+        private boolean isTimerRunning;
          
          
         public MainController(DataController dataController){
@@ -85,11 +91,14 @@ public class MainController extends TimerTask{
             this.readoutController = new TimerReadoutController();
             this.editTaskController = new EditTaskController();
             
+            this.isViewUpdating = false;
+            
             // Set states
             editingTask = false;
+            isAddingTask = false;
             
             Timer timer = new Timer();
-            timer.scheduleAtFixedRate(this, 0, 500);
+            timer.scheduleAtFixedRate(this, 0, 80);
             
             
         }
@@ -104,8 +113,10 @@ public class MainController extends TimerTask{
         @FXML
         protected void openFile(ActionEvent event){
                 
-                dataController.setTaskRepo(storageController.attemptToLoadData());
                 
+                dataController.taskRepo = storageController.attemptToLoadData();
+                if(this.dataController.getTaskRepo() == null)
+                        this.dataController.setTaskRepo(new TaskRepository() );
                 updateTaskList();
              
                 
@@ -140,15 +151,18 @@ public class MainController extends TimerTask{
         protected void addTask(ActionEvent event){
             // Alter GUI for input 
             // Control is now passed to user for task name input
-            addTaskController.startAddTask(this);
-  
+            addTaskController = new AddTaskController();
+            addTaskController.startAddTask();
+            clearRoot();
+            root.setCenter(addTaskController.getEntryView());
+            this.isAddingTask = true;
         }
         
         // Used when control needs to be passed from AddTaskController object
         // To this
         protected void endAddNewTask(){
             addTaskController = new AddTaskController();
-            
+            this.isAddingTask = false;
             // Revert to task list view
             restoreRoot();
         }
@@ -197,15 +211,32 @@ public class MainController extends TimerTask{
         @FXML
         protected void startTask(ActionEvent event){
             
+   
+            
             // Make sure a task is selected
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
+                this.isViewUpdating = true;
                 indexOfRunningTask = taskList.getSelectionModel().getSelectedIndex();
                 // Pass control
 
                 readoutController = new TimerReadoutController();
-                this.readoutController.startTimerTask(root, rootReadout, 
-                        indexOfRunningTask, dataController, this);
+                readoutController.startTimers();
+                
+                
+                clearRoot();
+                
+                
+                root.setCenter(readoutController.getReadoutView());
+                root.centerProperty();
+             
+
+                
+                
+                
+                this.isTimerRunning = true;
+                this.isViewUpdating = false;
             }
+           
         }
         
         
@@ -259,6 +290,27 @@ public class MainController extends TimerTask{
             updateTaskList();
         }
         
+        
+        // Timer Readout Functions
+        protected void updateTimerReadout(){
+            
+            isViewUpdating = true;
+            this.readoutController.updateReadoutView();   
+            isViewUpdating = false;
+        }
+        
+        protected void endTimerReadout(){
+            this.readoutController.getTimerDuration();
+            this.readoutController.setRunning(false);
+            
+            // Get timer duratin and add as a session
+            this.dataController.getTaskRepo().getTasks().
+                    get(taskList.getSelectionModel().getSelectedIndex()).
+                    addSession(this.readoutController.getTimerDuration());
+            
+            this.readoutController = new TimerReadoutController();
+            this.isTimerRunning = false;
+        }
         
         
         
@@ -318,9 +370,17 @@ public class MainController extends TimerTask{
                 dataController.getTaskRepo().sortByRecent();
                 ArrayList<String> list = new ArrayList<>();
                 for(Task task : dataController.getTaskRepo().getTasks())
-                    list.add(task.getName() + "\r\n" +
-                            "Last Run: " + new Date(task.getLastRun().getTime()) + "\r\n" +
-                            "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
+                    
+                    if(task.getSessionCount() > 0){
+                        list.add(task.getName() + "\r\n" +
+                        "Last Run: " + new Date(task.getLastRun().getTime()) + "\r\n" +
+                        "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
+                    } else {
+                        list.add(task.getName() + "\r\n" +
+                                "No Sessions Recorded" + "\r\n" +
+                                "Total Time: " + LongToReadableTime.getReadableTime(task.getTotalTime()));
+                    }
+
 
                 
                 ObservableList<String> items = FXCollections.observableArrayList();
@@ -356,35 +416,55 @@ public class MainController extends TimerTask{
             root.setCenter(vBoxTaskList);
             root.setRight(vBoxRight);
         }
-        
-        protected void setRootCenter(VBox rootCenter){
-            this.root.setCenter(rootCenter);
-        }
+       
 
     @Override
     public void run() {
         
         Platform.runLater(() -> {
             
-            //When the controlcontroller is active and such hasn't been reflected by this.editingTask
-            if(!this.editTaskController.getState() && this.editingTask == true) {
-                editingTask = false;
-                
-                
-                // Get the edited task and update the data model if the task controller
-                // has the state of true for confirmed instead of false for a cancel action
-                if(this.editTaskController.getConfirmedStatus()){
-                    dataController.getTaskRepo().getTasks().get(
-                        taskList.getSelectionModel().getSelectedIndex()).setTask(
-                        this.editTaskController.getEditedTask());
-                    
-                    
+            
+            if(this.isViewUpdating != true){
+                //When the controlcontroller is active and such hasn't been reflected by this.editingTask
+                if(!this.editTaskController.getState() && this.editingTask == true) {
+                    editingTask = false;
+
+
+                    // Get the edited task and update the data model if the task controller
+                    // has the state of true for confirmed instead of false for a cancel action
+                    if(this.editTaskController.getConfirmedStatus()){
+                        dataController.getTaskRepo().getTasks().get(
+                            taskList.getSelectionModel().getSelectedIndex()).setTask(
+                            this.editTaskController.getEditedTask());
+
+
+                    }
+
+
+                    this.editTaskController = new EditTaskController();
+                    restoreRoot();
                 }
+
+
+
+
+                // If a timer has stopped and this.isTimerRunning reflects that it is 
+                // still running
+                if(this.readoutController.isRunning() && this.isTimerRunning == true){
+                    if(this.readoutController.getReadoutView() != null)
+                        updateTimerReadout();
+                }else if(!this.readoutController.isRunning() && this.isTimerRunning == true){
+                    this.isTimerRunning = false;
+                    endTimerReadout();
+                    restoreRoot();
+                } 
                 
-                
-                this.editTaskController = new EditTaskController();
-                restoreRoot();
+                if(!this.addTaskController.isIsAdding() && this.isAddingTask == true){
+                    dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
+                    this.endAddNewTask();
+                }
             }
+
         });
 
     }

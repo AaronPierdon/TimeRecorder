@@ -41,6 +41,8 @@ public class Task implements Serializable{
     // Length of time in milliseconds it was performed.
     private HashMap<Long, Long> sessions;
     
+    
+    
    
     //
     // Constructors
@@ -99,18 +101,7 @@ public class Task implements Serializable{
     public void addTime(long time){
         this.totalTime += time;
         
-        // Get the value for the key 0
-        long key = 0;
-        long currentUnorganizedTime = 0;
-        
-        if(this.sessions.get(key) != null && !this.sessions.isEmpty())
-            currentUnorganizedTime = this.sessions.get(key);
-        
-        // Add the added time to the currentUnorganizedTime and put in the
-        // key 0
-        this.sessions.put(key, (time + currentUnorganizedTime));
-        
-        this.lastRun = new Date(System.currentTimeMillis());
+ 
         
     }
     
@@ -131,6 +122,9 @@ public class Task implements Serializable{
 
     
 
+    public int getSessionCount(){
+        return this.sessions.size();
+    }
     
     public String getName(){
         return this.taskName;

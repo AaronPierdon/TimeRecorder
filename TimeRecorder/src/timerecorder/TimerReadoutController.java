@@ -6,148 +6,122 @@
 package timerecorder;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import utility.io.parse.LongToReadableTime;
 
 
-public class TimerReadoutController extends TimerTask{
+public class TimerReadoutController{
     
-    @FXML protected BorderPane root;
-    @FXML protected VBox rootReadout;
-    @FXML protected Label lblTimerReadout;
+
     
     // Concurrent Tasks
-    private ColorChanger colorChanger;
     private TimeCounter timeCounter;
     
-    // Data Controller
-    private DataController dataController;
     
-    private MainController mainController;
-    
-    private int indexOfRunningTask;
+    @FXML private VBox rootReadout;
+    @FXML private Label lblTimerReadout;
     
     private boolean running;
     
+    private ColorChanger colorChanger;
     
-    public void TimerReadoutController(){
+    
+    
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+    
+    
+    public TimerReadoutController(){
         running = false;
         this.colorChanger = new ColorChanger();
         this.timeCounter = new TimeCounter();
     }
     
-    public void startTimerTask(BorderPane root, VBox rootReadout, int indexOfRunningTask, 
-            DataController dataController, MainController mainController){
-        
-        running = true;
-        this.root = root;
-        
-        this.colorChanger = new ColorChanger();
-        this.timeCounter = new TimeCounter();
-        this.dataController = dataController;
-        this.mainController = mainController;
-        
-        this.indexOfRunningTask = indexOfRunningTask;
-        
-        Timer thisTimer = new Timer();
 
-        thisTimer.scheduleAtFixedRate(this, 0, 250);
+    
+    protected long getTimerDuration(){
         
-        loadReadoutGUI();
-        startTimers();
-        
-        
-        
+        return this.timeCounter.totalTime;
+         
     }
     
-    protected void loadReadoutGUI(){
-        root.getChildren().clear();
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
-        loader.setController(this);
-             
-        try{
-            VBox timerReadout = loader.load();
-            
-            this.rootReadout = timerReadout;
-            
-            lblTimerReadout.setText("00:00:00");
-            root.setCenter(rootReadout);
-            
-            
-        }catch(IOException e){
-            
-        }
-        
 
-    }
     
     protected void startTimers(){
-        timeCounter.startTimer(this);
-        colorChanger.startTimer(this.rootReadout);
+        this.timeCounter.startTimer();
+        running = true;
     }
 
-    protected void updateReadoutGUI(){
-        lblTimerReadout.setText(LongToReadableTime.getReadableTime(timeCounter.getTotalTime()));
-    }
+
     
     
-    protected void endTimerReadout(){
-        dataController.getTaskRepo().getTasks().get(indexOfRunningTask).
-            addSession(timeCounter.getTotalTime());
 
-        
-   
-        
-        indexOfRunningTask = 0;
-        
-        revertFromTimerGUI();
-        
-
-    }
     
-    // Passes control back to main controller by requesting a reset of the GUI
-    protected void revertFromTimerGUI(){
-        mainController.restoreRoot();
-        
-    }
-    
-    @Override
-    public void run() {
-        Platform.runLater(() -> {
-
-
-        });
-    }
 
     @FXML
     protected void stopTimer(ActionEvent event){
-        endTimerReadout();
+        
+        this.running = false;
         this.cancelTimer();
     }
         
     public void cancelTimer(){
         if(running == true){
-            this.colorChanger.cancelTimer();
-            this.colorChanger = new ColorChanger();
             this.timeCounter.cancelTimer();
-            this.timeCounter = new TimeCounter();
 
-            this.cancel();
-            
-            running = false;
         }
 
         
         
         
     }
+    
+    protected void buildReadoutView(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
+        
+        loader.setController(this);
+        try{
+           this.rootReadout = loader.load();
+        }catch(IOException e){
+            System.out.println("failed");
+        }
+       
+          
+    }
+    
+    protected VBox getReadoutView(){
+        if(this.rootReadout != null)
+            return this.rootReadout;
+        else{
+            buildReadoutView();
+            return this.rootReadout;
+        }
+    }
+    
+    protected void setReadoutStyle(String inStyle){
+        this.rootReadout.setStyle(inStyle);
+    }
+    
+    protected void updateReadoutView(){
+        // how will u make the readout updated in reponse to color changes.u
+        
+
+        rootReadout.setStyle(colorChanger.getColorSequence());
+        
+        lblTimerReadout.setText(LongToReadableTime.getReadableTime(this.timeCounter.getTotalTime()));
+        
+    
+        
+    }
+    
+
 }
