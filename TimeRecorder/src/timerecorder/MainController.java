@@ -23,8 +23,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.SplitPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -420,6 +422,7 @@ public class MainController extends TimerTask{
         }
         
         protected void displayReadoutScene(){
+            
          FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
          loader.setController(this.readoutController);
 
@@ -429,6 +432,18 @@ public class MainController extends TimerTask{
                 this.primaryStage.setScene(scene);
 
             }catch(IOException e){}
+            
+            
+            /*
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/test.fxml"));
+            loader.setController(this);
+            
+            try{
+                SplitPane bor = loader.load();
+                Scene scene = new Scene(bor);
+                this.primaryStage.setScene(scene);
+            }catch(IOException e){}
+            */
         }
         
         // Restores the root border pane to default

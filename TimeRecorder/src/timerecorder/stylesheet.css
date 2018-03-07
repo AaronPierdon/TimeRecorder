@@ -38,7 +38,8 @@ Description :
 }
 
 .label{
-    -fx-background-color: derive(#000000, 30%);
+    -fx-background-color: transparent;
+    -fx-border-color: derive(#222222, 80%);
     -fx-text-fill: derive(#3ee028, 35%);
 }
 

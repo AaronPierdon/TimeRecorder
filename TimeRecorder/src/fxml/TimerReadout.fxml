@@ -10,16 +10,21 @@
 
 <VBox fx:id="rootReadout" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="202.0" stylesheets="@../timerecorder/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label id="lblTimerReadout" fx:id="lblTimerReadout" alignment="CENTER" contentDisplay="CENTER" prefHeight="329.0" prefWidth="132.0" textFill="#6df540" VBox.vgrow="ALWAYS">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-         <effect>
-            <DropShadow blurType="GAUSSIAN" />
-         </effect>
-         <VBox.margin>
-            <Insets top="40.0" />
-         </VBox.margin></Label>
+      <StackPane prefHeight="291.0" prefWidth="202.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label id="lblTimerReadout" fx:id="lblTimerReadout" alignment="CENTER" contentDisplay="CENTER" prefHeight="420.0" prefWidth="360.0" textFill="#6df540">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="GAUSSIAN" />
+               </effect>
+               <StackPane.margin>
+                  <Insets left="15.0" right="15.0" top="15.0" bottom="5.0"/>
+               </StackPane.margin>
+            </Label>
+         </children>
+      </StackPane>
       <StackPane prefHeight="53.0" prefWidth="202.0" VBox.vgrow="NEVER">
          <children>
             <Button id="btnStopTimer" fx:id="btnStopTimer" mnemonicParsing="false" onAction="#stopTimer" text="Stop" StackPane.alignment="BOTTOM_RIGHT">
@@ -29,7 +34,7 @@
             </Button>
          </children>
          <VBox.margin>
-            <Insets top="190.0" />
+            <Insets />
          </VBox.margin>
       </StackPane>
    </children>
