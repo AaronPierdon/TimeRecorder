@@ -61,24 +61,7 @@ public class TimeRecorder extends Application {
         theStage = stage;
         closer = new Closer();
         stage.setOnCloseRequest(closer);
-        
- 
-        
-        
-        
-        
-        
-        
-
-        
-        
-        
-        
         stage.setAlwaysOnTop(true);
-        
-
-       
-
         
         
         this.setMainScene();
