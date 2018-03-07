@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.fxml.*;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
@@ -26,6 +27,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import static timerecorder.TimeRecorder.theStage;
 import timerecorderdatamodel.Task;
 import timerecorderdatamodel.TaskRepository;
 import utility.io.parse.LongToReadableTime;
@@ -82,9 +85,13 @@ public class MainController extends TimerTask{
         // 
         private EditTaskController editTaskController;
         private boolean isTimerRunning;
+        
+        private Stage primaryStage;
          
          
-        public MainController(DataController dataController){
+        public MainController(DataController dataController, Stage primaryStage){
+            
+            this.primaryStage = primaryStage;
             storageController = new StorageController();
             this.dataController = dataController;
             this.addTaskController = new AddTaskController();
@@ -211,7 +218,7 @@ public class MainController extends TimerTask{
         @FXML
         protected void startTask(ActionEvent event){
             
-   
+         
             
             // Make sure a task is selected
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
@@ -221,23 +228,14 @@ public class MainController extends TimerTask{
 
                 readoutController = new TimerReadoutController();
                 readoutController.startTimers();
-                
-                
-                clearRoot();
-                
-                
-                root.setCenter(readoutController.getReadoutView());
-                root.centerProperty();
-             
+    
+                 this.isTimerRunning = true;
+                 this.isViewUpdating = false;
 
-                
-                
-                
-                this.isTimerRunning = true;
-                this.isViewUpdating = false;
-            }
+                 displayReadoutScene();
            
         }
+    }
         
         
         
@@ -300,12 +298,14 @@ public class MainController extends TimerTask{
         }
         
         protected void endTimerReadout(){
+            
+            
             this.readoutController.getTimerDuration();
             this.readoutController.setRunning(false);
             
             // Get timer duratin and add as a session
             this.dataController.getTaskRepo().getTasks().
-                    get(taskList.getSelectionModel().getSelectedIndex()).
+                    get(indexOfRunningTask).
                     addSession(this.readoutController.getTimerDuration());
             
             this.readoutController = new TimerReadoutController();
@@ -397,8 +397,45 @@ public class MainController extends TimerTask{
             
         }
         
+        protected void displayMainScene(){
+                    
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimeRecorderMainFXML.fxml"));
+            BorderPane newRoot = new BorderPane();
+
+            newRoot.getStylesheets().add(getClass().getResource("stylesheet.css").toString());
+
+            fxmlLoader.setController(this);
+
+            try{
+                newRoot = fxmlLoader.load();
+
+            }catch(IOException e){
+
+            }
+
+            Scene scene  = new Scene(root);
+            this.primaryStage.setScene(scene);
+            
+            updateTaskList();
+        }
+        
+        protected void displayReadoutScene(){
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
+         loader.setController(this.readoutController);
+
+            try{
+                VBox newRoot = loader.load();
+                Scene scene = new Scene(newRoot);
+                this.primaryStage.setScene(scene);
+
+            }catch(IOException e){}
+        }
+        
         // Restores the root border pane to default
         protected void restoreRoot(){
+            
+
+            
             clearRoot();
             restoreRootPanes();
             updateTaskList(); 
@@ -456,9 +493,12 @@ public class MainController extends TimerTask{
                 }else if(!this.readoutController.isRunning() && this.isTimerRunning == true){
                     this.isTimerRunning = false;
                     endTimerReadout();
-                    restoreRoot();
+                    displayMainScene();
+              
                 } 
                 
+                // If the add task is complete but main has not recorded this state of
+                // the add task controller
                 if(!this.addTaskController.isIsAdding() && this.isAddingTask == true){
                     dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
                     this.endAddNewTask();

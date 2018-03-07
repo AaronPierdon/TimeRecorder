@@ -80,7 +80,7 @@ public class TimeRecorder extends Application {
         
             // Give the main controller a dataController so main can pass control to
         // Data Controller when the data model needs to be managed.
-        timeRecorderFXMLController = new MainController(this.dataController);
+        timeRecorderFXMLController = new MainController(this.dataController, theStage);
         fxmlLoader.setController(timeRecorderFXMLController);
         
         try{
@@ -95,24 +95,7 @@ public class TimeRecorder extends Application {
         theStage.setScene(theScene);
     }
     
-    public void setReadoutScene(){
-        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
-        VBox root = new VBox();
-        root.getStylesheets().add(getClass().getResource("stylesheet.css").toString());
-        
-        fxmlLoader.setController(timeRecorderFXMLController);
-        
-        try{
-            root = fxmlLoader.load();
-            
-        }catch(IOException e){
-        
-        }
-        
-        theScene = new Scene(root);
-        
-        theStage.setScene(theScene);
-    }
+
 
     public static void main(String[] args) {
         launch(args);
