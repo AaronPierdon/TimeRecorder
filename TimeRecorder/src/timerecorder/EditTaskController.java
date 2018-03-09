@@ -7,16 +7,23 @@ package timerecorder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDate;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
@@ -32,21 +39,31 @@ public class EditTaskController {
 
 
     @FXML private TextField txtNameInput, txtHours, txtMinutes, txtSeconds;
-    
+    @FXML CheckBox cboxAddSession;
+    @FXML DatePicker datePicker;
 
     
     private Task editedTask;
 
-    
+    // Lets caller know when this controller is done managing the view
     private boolean editingTask;
+    
+    // Let's caller know that the input was confirmed.
     private boolean confirmedStatus;
+    
+
+    
+    
     
     public EditTaskController(){
         editingTask = false;
         confirmedStatus = false;
+        
         editedTask = new Task();
 
     }
+
+  
 
     
     public VBox getEditView(){
@@ -58,7 +75,7 @@ public class EditTaskController {
         try{
       
             VBox editor = loader.load();
-            
+            datePicker.setVisible(false);
             // Now that the fxml controls are loaded, set the factories to the 
             // Spinners
             
@@ -88,6 +105,11 @@ public class EditTaskController {
 
     public void loadTaskValues(){
         txtNameInput.setText(editedTask.getName());
+        
+        txtHours.setText(String.valueOf(0));
+        txtMinutes.setText(String.valueOf(0));
+        txtSeconds.setText(String.valueOf(0));
+        
 
     }
     
@@ -117,8 +139,16 @@ public class EditTaskController {
             long taskTimeInMilli = (long) 1000 * ((Integer.valueOf(txtSeconds.getText())) + 
                 (Integer.valueOf(txtMinutes.getText()) * 60) +
                 (Integer.valueOf(txtHours.getText()) * 60 * 60));
-            editedTask.addTime(taskTimeInMilli);
+            
+            if(cboxAddSession.isSelected()){
+                Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                editedTask.addSession(taskTimeInMilli, date);
+            }else
+                editedTask.addTime(taskTimeInMilli);
+            
+            editedTask.setName(txtNameInput.getText());
 
+            
             // Ends editing
             confirmedStatus = true;
             editingTask = false;
@@ -141,6 +171,28 @@ public class EditTaskController {
         editingTask = false;
     }
     
+    // Selects the text field input for the given source of event if any apply
+    @FXML
+    protected void textClicked(MouseEvent event){
+        if(event.getSource().toString().contains("Hours")){
+            txtHours.selectAll();
+        } else if(event.getSource().toString().contains("Minutes")){
+            txtMinutes.selectAll();
+        } else if(event.getSource().toString().contains("Seconds")){
+            txtSeconds.selectAll();
+        } else if(event.getSource().toString().contains("Name")){
+            txtNameInput.selectAll();
+        }
+        
+    }
+    
+    @FXML
+    protected void toggleDatePicker(MouseEvent event){
+        if(cboxAddSession.isSelected())
+            datePicker.setVisible(true);
+        if(!cboxAddSession.isSelected())
+            datePicker.setVisible(false);
+    }
 
 
     

@@ -3,35 +3,17 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="306.0" stylesheets="timerecorder/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <HBox fx:id="hBoxTop" alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="306.0" BorderPane.alignment="CENTER">
-         <children>
-            <MenuButton id="menuBtnFile" fx:id="btnFileMenu" mnemonicParsing="false" text="File">
-              <items>
-                <MenuItem fx:id="btnOpenFile" mnemonicParsing="false" onAction="#openFile" text="Open File" />
-                <MenuItem fx:id="btnSaveFile" mnemonicParsing="false" onAction="#saveFile" text="Save File" />
-              </items>
-               <HBox.margin>
-                  <Insets left="15.0" />
-               </HBox.margin>
-            </MenuButton>
-         </children>
-         <BorderPane.margin>
-            <Insets left="10.0" />
-         </BorderPane.margin>
-      </HBox>
-   </top>
    <right>
-      <VBox fx:id="vBoxRight" prefHeight="317.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vBoxRight" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="143.0" prefWidth="80.0" VBox.vgrow="ALWAYS">
+            <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="15.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -41,11 +23,16 @@
                         <Insets top="20.0" />
                      </VBox.margin>
                   </Button>
-                  <VBox alignment="CENTER" prefHeight="113.0" prefWidth="80.0">
+                  <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets top="45.0" />
                      </VBox.margin>
                      <children>
+                        <Button fx:id="btnViewSessions" mnemonicParsing="false" onAction="#viewSessions" text="View Sessions">
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Button>
                         <Button fx:id="btnViewChart" mnemonicParsing="false" onAction="#viewChart" text="View Chart">
                            <VBox.margin>
                               <Insets bottom="10.0" />
@@ -98,4 +85,27 @@
          </BorderPane.margin>
       </VBox>
    </center>
+   <top>
+      <MenuBar fx:id="btnFileMenu" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="btnOpenFile" mnemonicParsing="false" onAction="#openFile" text="Open File" />
+                  <MenuItem fx:id="btnSaveFile" mnemonicParsing="false" onAction="#saveFile" text="Save File" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="View">
+            <items>
+              <MenuItem fx:id="btnAlwaysOnTop" mnemonicParsing="false" onAction="#alwaysOnTop" text="Always On Top" />
+            </items>
+          </Menu>
+        </menus>
+         <padding>
+            <Insets bottom="10.0" left="15.0" right="10.0" top="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets left="10.0" />
+         </BorderPane.margin>
+      </MenuBar>
+   </top>
 </BorderPane>

@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,7 +18,7 @@
          <children>
             <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField id="txtNameInput" fx:id="txtNameInput" promptText="Name (Blank if Same)" />
+                  <TextField id="txtNameInput" fx:id="txtNameInput" onMouseClicked="#textClicked" promptText="Name (Blank if Same)" />
                </children>
             </HBox>
             <GridPane>
@@ -34,25 +36,45 @@
                   <Label fx:id="lblHours" text="Hours" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <Label fx:id="lblMinutes" text="Minutes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                   <Label fx:id="lblSeconds" text="Seconds" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <TextField fx:id="txtHours" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtMinutes" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtSeconds" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtHours" onMouseClicked="#textClicked" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtMinutes" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtSeconds" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>
       </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <CheckBox fx:id="cboxAddSession" mnemonicParsing="false" onMouseClicked="#toggleDatePicker" text="Add As Session?">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" top="10.0" />
+               </VBox.margin>
+            </CheckBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <DatePicker fx:id="datePicker" />
+               </children>
+               <opaqueInsets>
+                  <Insets bottom="5.0" top="5.0" />
+               </opaqueInsets>
+            </HBox>
+         </children>
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
+      </VBox>
       <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="90.0" prefWidth="231.0">
+            <HBox alignment="BOTTOM_CENTER" prefHeight="90.0" prefWidth="231.0">
                <children>
-                  <Button id="btnConfirmEdit" fx:id="btnConfirmEdit" mnemonicParsing="false" onAction="#confirmEdit" text="Confirm Edit">
+                  <Button id="btnConfirmEdit" fx:id="btnAddTime" mnemonicParsing="false" onAction="#confirmEdit" text="Add Time">
                      <HBox.margin>
-                        <Insets left="10.0" />
+                        <Insets bottom="1.0" right="5.0" />
                      </HBox.margin>
                   </Button>
                   <Button id="btnConfirmEdit" fx:id="btnCancelEdit" mnemonicParsing="false" onAction="#cancelEdit" text="Cancel">
                      <HBox.margin>
-                        <Insets left="10.0" right="5.0" />
+                        <Insets bottom="1.0" />
                      </HBox.margin>
                   </Button>
                </children>

@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -36,15 +37,7 @@ public class PieChartController {
     // The tasks to assess
     private ArrayList<Task> tasks;
     private Stage primaryStage;
-    private boolean done;
 
-    public void setDone(boolean done) {
-        this.done = done;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
     
     @FXML protected PieChart pieChart;
     @FXML protected StackPane pieRoot;
@@ -52,13 +45,11 @@ public class PieChartController {
     
     
     public PieChartController(){
-        done = true;
         tasks = new ArrayList<>();
     }
     
-    protected void showPieChart(Stage primaryStage, ArrayList<Task> tasks){
-        this.done = false;
-        this.primaryStage = primaryStage;
+    protected void showPieChart( ArrayList<Task> tasks){
+        this.primaryStage = new Stage();
         this.tasks = tasks;
         buildRootView();
         buildPieChart();        
@@ -68,48 +59,62 @@ public class PieChartController {
     private void buildPieChart(){
         ArrayList<Data> data = getPieChartMap();
     
+        // Tasks to compare?
+        if(data != null){
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+            for(Data dataElement : data)
+            {
+                pieChartData.add(dataElement);
+            }
+
+
+            pieChart.setData(pieChartData);
+        } 
         
-        
-        
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-         
-        for(Data dataElement : data)
-        {
-            pieChartData.add(dataElement);
+        // Display no task notification
+        else{
+            this.pieRoot.getChildren().clear();
+            Label noData = new Label("No Data");
+            noData.setStyle("-fx-font-size: 3em");
+            
+            this.pieRoot.getChildren().add(noData);
         }
-        
-        
-        pieChart.setData(pieChartData);
+
     }
     
     private ArrayList<Data> getPieChartMap(){
         
-        ArrayList<Data> chartMap = new ArrayList<>();
+        if(!tasks.isEmpty()){
+            ArrayList<Data> chartMap = new ArrayList<>();
         
-        // Total Durations of each task
-        ArrayList<Long> totals = new ArrayList<>();
-        
-        // Get the totals
-        for(Task task : this.tasks){
-            totals.add(task.getTotalTime());
-        }
-        
-        // Get the total of all the tasks's durations
-        long allTasksDuration = 0;
-        
-        for(Long duration : totals)
-            allTasksDuration += duration;
+            // Total Durations of each task
+            ArrayList<Long> totals = new ArrayList<>();
 
-    
-        
-        Iterator taskNames = tasks.iterator();
-        for(Long total : totals){
-            Double percentOfTotal =  (Double)(Double.valueOf(total) / Double.valueOf(allTasksDuration));
-            Task tempTask = (Task) taskNames.next();
-            chartMap.add(new Data((String) tempTask.getName(), percentOfTotal));
-        }
+            // Get the totals
+            for(Task task : this.tasks){
+                totals.add(task.getTotalTime());
+            }
 
-        return chartMap;
+            // Get the total of all the tasks's durations
+            long allTasksDuration = 0;
+
+            for(Long duration : totals)
+                allTasksDuration += duration;
+
+
+
+            Iterator taskNames = tasks.iterator();
+            for(Long total : totals){
+                Double percentOfTotal =  (Double)(Double.valueOf(total) / Double.valueOf(allTasksDuration));
+                Task tempTask = (Task) taskNames.next();
+                chartMap.add(new Data((String) tempTask.getName(), percentOfTotal));
+            }
+
+            return chartMap;
+        } else
+            return null;
+
     }
     
   
@@ -121,8 +126,9 @@ public class PieChartController {
         try{
             rootPane = loader.load();
             rootPane.getStylesheets().add(getClass().getResource("/timerecorder/stylesheet.css").toString());
-            Scene scene = new Scene(rootPane);
+            Scene scene = new Scene(rootPane, 600, 600);
             primaryStage.setScene(scene);
+            primaryStage.show();
             
         }catch(IOException e){}
     }
@@ -131,7 +137,8 @@ public class PieChartController {
     }
     
     @FXML protected void closePieChart(ActionEvent event){
-        this.done = true;
+        primaryStage.close();
+        
     }
     
     

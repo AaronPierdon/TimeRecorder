@@ -83,30 +83,63 @@ public class Task implements Serializable{
     
 
     
-    // Main AddTime Method, accepts a long
+    // Main AddTime Method, accepts a long and sets the session date to now
     public void addSession(long time){
-        // Increment total time by
-        this.totalTime += time;
         
-        // Record the date and time of now
-        long date = System.currentTimeMillis();
+        // No negatives
         
-        // Record the date and time of now along with the length of the task that was 
-        // Added now
-        this.sessions.put(date, time);
-        this.lastRun = new Date(date);
+        if(time >= 0){
+            // Increment total time by
+            this.totalTime += time;
+
+            // Record the date and time of now
+            long date = System.currentTimeMillis();
+
+            // Record the date and time of now along with the length of the task that was 
+            // Added now
+            this.sessions.put(date, time);
+            this.lastRun = new Date(date);
+        }
+
   
     }
     
+    // Main AddTime Method, accepts a long and sets the session date to the input Date
+    public void addSession(long time, Date sessionDate){
+        // No negatives
+        
+        if(time >= 0)
+        {
+            // Increment total time by
+            this.totalTime += time;
+
+            
+
+            // Record the date and time of now along with the length of the task that was 
+            // Added now
+            this.sessions.put(sessionDate.getTime(), time);
+        
+            
+            
+        }
+    }
+    
+    public HashMap<Long, Long> getSessions(){
+        return this.sessions;
+    }
+    
+    
     public void addTime(long time){
-        this.totalTime += time;
+        // No negatives
+        if(time >= 0)
+            this.totalTime += time;
         
  
         
     }
     
     // Set this.sessions to one that is sorted by key, the time of occurrence
-    public void sortByRecent(){
+    public void sortSessionsByRecent(){
          Map.Entry newEntry;
          Map<Long, Long> map = new TreeMap<Long, Long>(this.sessions);
          Set set2 = map.entrySet();
@@ -135,7 +168,7 @@ public class Task implements Serializable{
     }
     
     
-public void setLastRun(Date lastRun) {
+    public void setLastRun(Date lastRun) {
         this.lastRun = lastRun;
     }
 

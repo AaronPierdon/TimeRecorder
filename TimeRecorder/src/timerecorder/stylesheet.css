@@ -43,50 +43,158 @@ Description :
 }
 
 .chart-pie-label {
+    -fx-background-color: derive(#002000, 20%);
     -fx-fill: #33ff33;
     -fx-font-size: 1em;
 } 
 
 .chart-legend{
-    -fx-background-color: derive(#002000, 20%);
+   -fx-background-color: derive(#000000 , 20%);
+   -fx-border-color: derive(#000000, 30%);
     
 }
 
 
+.combo-box-base{
+        -fx-background-color: derive(#000000, 30%);
+    
+    -fx-text-fill: derive(#3ee028, 35%);
+    -fx-body-color: derive(#111111, 30%);
+}
 
+.date-picker-popup {
+     -fx-background-color:
+        linear-gradient(to bottom,
+            derive(#22ff22,-17%),
+            derive(#22ff22,-30%)
+        ),
+        -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0;
+    -fx-alignment: CENTER; /* VBox */
+    -fx-spacing: 0; /* VBox */
+    -fx-padding: 0.083333em; /* 1 1 1 1 */
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.2) , 12, 0.0 , 0 , 8 );
+}
 
+.date-picker-popup > .month-year-pane {
+    -fx-padding: 0.588883em 0.5em 0.666667em 0.5em; /* 7 6 8 6 */
+    -fx-background-color: derive(#000000, 30%);
+    -fx-background-insets: 0 0 0 0, 0 0 1 0;
+}
+.date-picker-popup > .calendar-grid {
+    -fx-background-color: derive(#002000, 20%);
+    -fx-fill: #33ff33;
+    /*-fx-background-insets: 1 0 0 0;*/
+    -fx-padding: 0;
+}
+.date-picker-popup > * > .date-cell {
+    -fx-background-color: derive(#002000, 20%);
+    -fx-fill: #33ff33;
+    -fx-background-insets: 1, 2;
+    -fx-padding: 0;
+    -fx-alignment: BASELINE_CENTER;
+    -fx-opacity: 1.0;
+}
+.date-picker-popup > * > .day-name-cell,
+.date-picker-popup > * > .week-number-cell {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: #33ff33;
+}
+.date-picker-popup > * > .week-number-cell {
+    -fx-padding: 0.333333em 0.583333em 0.333333em 0.583333em; /* 4 7 4 7 */
+    -fx-border-color: -fx-control-inner-background;
+    -fx-border-width: 1px;
+    -fx-background: -fx-control-inner-background;
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-accent;
+}
+.date-picker-popup > * > .day-cell {
+    -fx-padding: 0.333333em 0.583333em 0.333333em 0.583333em; /* 4 7 4 7 */
+    -fx-border-color: derive(#333333, 60%);
+    -fx-border-width: 1px;
+    -fx-font-size: 1em;
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: #33ff33;
+ 
+}
+.date-picker-popup > * > .day-cell:hover,
+.date-picker-popup > * > .selected,
+.date-picker-popup > * > .previous-month.selected,
+.date-picker-popup > * > .next-month.selected {
+    -fx-background-color: #333333;
+    -fx-text-fill: #66ffff;
+}
+.date-picker-popup > * > .day-cell > .secondary-text {
+    -fx-fill: #f3622d;
+}
+
+.check-box{
+    -fx-background-color: derive(#000000, 30%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+
+.date-picker-popup > * > .today {
+    -fx-background-color: derive(#666600, 20%);
+    -fx-text-fill: #ffffff;
+    -fx-background-insets: 1, 2, 3;
+}
 
 
 
 .menu-bar{
-    -fx-background-color: derive(#000000, 30%);
+    -fx-background-color: derive(#4b6348, 5%);
     
     -fx-text-fill: derive(#3ee028, 35%);
+
     
 }
 .menu-button{
-    -fx-background-color: derive(#000000, 30%);
+    -fx-background-color: derive(#4d634a, 20%);
     
     -fx-text-fill: derive(#3ee028, 35%);
+            -fx-border-color:#333333;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font-weight: bold;
 }
 
-.label{
-    -fx-background-color: derive(#000000, 30%); 
+
+.menu {
+            -fx-background-color: derive(#4d634a, 20%);
+    
     -fx-text-fill: derive(#3ee028, 35%);
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
 }
-
 .context-menu{
     
-        -fx-background-color: derive(#000000, 30%);
+       -fx-background-color: derive(#4d634a, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+.menu-bar > .container > .menu-button:hover > .label,
+.menu-bar > .container > .menu-button:focused > .label,
+.menu-bar > .container > .menu-button:showing  > .label {
+       -fx-background-color: derive(#4d634a, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+
+}
+
+.menu-bar > .container > .menu-button > .label {
     
+    -fx-background-color: derive(#4d634a, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+
+    
+}
+
+.menu-item >.label {
+       -fx-background-color: derive(#4d634a, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
 }
 
+.menu-item:focused {
+    -fx-background-color: derive(#222222, 21%);
 
-
-
-
-
+}
 
 .list-view{
     
@@ -114,18 +222,15 @@ Description :
 }
 
 #vBoxTaskList{
-    -fx-background-color: derive(#4d634a, 20%);
+    -fx-background-color: derive(#4d634a, 30%);
     
 }
 
 #vBoxRight{
-      -fx-background-color: derive(#4d634a, 20%);
+     -fx-background-color: derive(#4b6348, 5%);
 
 }
 
-#hBoxTop{
-      -fx-background-color: derive(#4d634a, 20%);
-     
-}
+
 
 

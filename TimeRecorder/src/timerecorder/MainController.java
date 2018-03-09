@@ -18,10 +18,12 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.fxml.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.effect.DropShadow;
@@ -41,12 +43,16 @@ public class MainController extends TimerTask{
         long miliime;
     
         // Main GUI elements that need to be altered or used
-        @FXML private Button  btnAddTask, btnEditTime, btnViewChart,
+        @FXML private Button  btnAddTask, btnEditTime, btnViewSessions, btnViewChart,
                 btnDelete, btnStart, btnClose;
         
-        @FXML private MenuButton btnFileMenu;
+        @FXML private MenuBar btnFileMenu;
+       
         
         @FXML private BorderPane root;
+        
+        private double rootWidth;
+        private double rootHeight;
 
         @FXML private VBox vBoxTaskList;
         @FXML private VBox vBoxRight;
@@ -103,6 +109,9 @@ public class MainController extends TimerTask{
             this.readoutController = new TimerReadoutController();
             this.editTaskController = new EditTaskController();
             this.pieChartController = new PieChartController();
+            
+            this.rootWidth = 360;
+            this.rootHeight = 420;
             
             this.isViewUpdating = false;
             
@@ -213,8 +222,7 @@ public class MainController extends TimerTask{
         @FXML
         protected void viewChart(ActionEvent event){
             this.pieChartController = new PieChartController();
-            this.showingChart = true;
-            this.pieChartController.showPieChart(primaryStage, 
+            this.pieChartController.showPieChart( 
                     dataController.getTaskRepo().getTasks());
             
             
@@ -240,6 +248,8 @@ public class MainController extends TimerTask{
                  this.isTimerRunning = true;
                  this.isViewUpdating = false;
 
+                 this.rootWidth = root.getWidth();
+                 this.rootHeight = root.getHeight();
                  displayReadoutScene();
            
         }
@@ -253,13 +263,16 @@ public class MainController extends TimerTask{
             
             
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
-            
+                
+                hideAllExceptClose();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeleteConfirmPane.fxml"));
                 
                 loader.setController(this);
                 
                 try{
                     StackPane confirmPane = loader.load();
+                    confirmPane.setPrefSize(200, 80);
+                    confirmPane.setPadding(new Insets(0, 0, 5, 0));
                     vBoxTaskList.getChildren().add(confirmPane);
                     
                 }catch(IOException e){
@@ -283,8 +296,11 @@ public class MainController extends TimerTask{
         protected void confirmedDelete(ActionEvent event){
             dataController.removeTask(taskList.getSelectionModel().getSelectedIndex());
             
-            // Revert to task list view
+            vBoxTaskList.getChildren().clear();
+            vBoxTaskList.setAlignment(Pos.TOP_LEFT);
+            vBoxTaskList.getChildren().add(taskList);
             updateTaskList();
+            showControls();
         }
         
         @FXML
@@ -294,8 +310,16 @@ public class MainController extends TimerTask{
             vBoxTaskList.setAlignment(Pos.TOP_LEFT);
             vBoxTaskList.getChildren().add(taskList);
             updateTaskList();
+            showControls();
         }
         
+        @FXML 
+        protected void alwaysOnTop(){
+            
+            
+            this.primaryStage.setAlwaysOnTop(!this.primaryStage.isAlwaysOnTop());
+            
+        }
         
         // Timer Readout Functions
         protected void updateTimerReadout(){
@@ -303,6 +327,21 @@ public class MainController extends TimerTask{
             isViewUpdating = true;
             this.readoutController.updateReadoutView();   
             isViewUpdating = false;
+        }
+        
+        @FXML 
+        protected void viewSessions(ActionEvent event){
+            // Make sure a task is selected
+            if(taskList.getSelectionModel().getSelectedIndex() >= 0){
+                Task tempTask = this.dataController.getTaskRepo().getTasks().get(
+                   taskList.getSelectionModel().getSelectedIndex());
+                
+                for(Long keyDdate : tempTask.getSessions().keySet()){
+                    System.out.println("Date: " + new Date(keyDdate).toString() +
+                            " Duration: " + LongToReadableTime.getReadableTime(
+                                    tempTask.getSessions().get(keyDdate)));
+                }
+            }
         }
         
         protected void endTimerReadout(){
@@ -352,6 +391,7 @@ public class MainController extends TimerTask{
             btnFileMenu.setVisible(true);
             btnAddTask.setVisible(true);
             btnEditTime.setVisible(true);
+            btnViewSessions.setVisible(true);
             btnViewChart.setVisible(true);
             btnStart.setVisible(true);
             btnDelete.setVisible(true);
@@ -365,9 +405,20 @@ public class MainController extends TimerTask{
             btnAddTask.setVisible(false);
             btnDelete.setVisible(false);
             btnEditTime.setVisible(false);
+            btnViewSessions.setVisible(false);
             btnViewChart.setVisible(false);
             btnStart.setVisible(false);
             btnClose.setVisible(false);
+        }
+        
+        private void hideAllExceptClose(){
+            btnFileMenu.setVisible(false);
+            btnAddTask.setVisible(false);
+            btnDelete.setVisible(false);
+            btnEditTime.setVisible(false);
+            btnViewSessions.setVisible(false);
+            btnViewChart.setVisible(false);
+            btnStart.setVisible(false);
         }
         
         
@@ -423,7 +474,7 @@ public class MainController extends TimerTask{
 
             }
 
-            Scene scene  = new Scene(root);
+            Scene scene  = new Scene(root, this.rootWidth, this.rootHeight);
             this.primaryStage.setScene(scene);
             
             updateTaskList();
@@ -440,18 +491,7 @@ public class MainController extends TimerTask{
                 this.primaryStage.setScene(scene);
 
             }catch(IOException e){}
-            
-            
-            /*
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/test.fxml"));
-            loader.setController(this);
-            
-            try{
-                SplitPane bor = loader.load();
-                Scene scene = new Scene(bor);
-                this.primaryStage.setScene(scene);
-            }catch(IOException e){}
-            */
+       
         }
         
         // Restores the root border pane to default
@@ -472,7 +512,7 @@ public class MainController extends TimerTask{
         }
     
         protected void restoreRootPanes(){
-            root.setTop(hBoxTop);
+            root.setTop(btnFileMenu);
             root.setCenter(vBoxTaskList);
             root.setRight(vBoxRight);
         }
@@ -523,17 +563,13 @@ public class MainController extends TimerTask{
                 // If the add task is complete but main has not recorded this state of
                 // the add task controller
                 if(!this.addTaskController.isIsAdding() && this.isAddingTask == true){
-                    dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
+                    // Make sure input was confirmed
+                    if(this.addTaskController.isConfirmedInput())
+                        dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
                     this.endAddNewTask();
                 }
                 
-                
-                if(this.pieChartController.isDone() && this.showingChart){
-                    this.pieChartController = new PieChartController();
-                    displayMainScene();
-                    updateTaskList();
-                    this.showingChart = false;
-                }
+
             }
 
         });

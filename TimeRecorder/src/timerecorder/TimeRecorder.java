@@ -61,7 +61,6 @@ public class TimeRecorder extends Application {
         theStage = stage;
         closer = new Closer();
         stage.setOnCloseRequest(closer);
-        stage.setAlwaysOnTop(true);
         
         
         this.setMainScene();
@@ -90,7 +89,7 @@ public class TimeRecorder extends Application {
         
         }
         
-        theScene = new Scene(root);
+        theScene = new Scene(root, 300, 420);
         
         theStage.setScene(theScene);
     }
