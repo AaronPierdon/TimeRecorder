@@ -41,7 +41,7 @@ public class MainController extends TimerTask{
         long miliime;
     
         // Main GUI elements that need to be altered or used
-        @FXML private Button  btnAddTask, btnEditTime,
+        @FXML private Button  btnAddTask, btnEditTime, btnViewChart,
                 btnDelete, btnStart, btnClose;
         
         @FXML private MenuButton btnFileMenu;
@@ -65,6 +65,7 @@ public class MainController extends TimerTask{
         private boolean isAddingTask;
         
         private boolean isViewUpdating;
+        private boolean showingChart;
 
 
 
@@ -83,6 +84,8 @@ public class MainController extends TimerTask{
         // Controls the view and communicates with the datamodel 
         // When a timer is running
         private TimerReadoutController readoutController;
+        
+        private PieChartController pieChartController;
 
         // 
         private EditTaskController editTaskController;
@@ -99,12 +102,14 @@ public class MainController extends TimerTask{
             this.addTaskController = new AddTaskController();
             this.readoutController = new TimerReadoutController();
             this.editTaskController = new EditTaskController();
+            this.pieChartController = new PieChartController();
             
             this.isViewUpdating = false;
             
             // Set states
             editingTask = false;
             isAddingTask = false;
+            showingChart = false;
             
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(this, 0, 80);
@@ -123,9 +128,7 @@ public class MainController extends TimerTask{
         protected void openFile(ActionEvent event){
                 
                 
-                dataController.taskRepo = storageController.attemptToLoadData();
-                if(this.dataController.getTaskRepo() == null)
-                        this.dataController.setTaskRepo(new TaskRepository() );
+                dataController.setTaskRepo(storageController.attemptToLoadData());
                 updateTaskList();
              
                 
@@ -134,17 +137,11 @@ public class MainController extends TimerTask{
         // Save File
         @FXML
         protected void saveFile(ActionEvent event){
-                
                 // Make sure there is data to save
                 if(!this.dataController.getTaskRepo().getTasks().isEmpty()){
                     // Start save routine
                     storageController.saveData(this.dataController.getTaskRepo(), true);
                 }
-
-                
-                
-                
-                
                 
         }
         
@@ -199,7 +196,7 @@ public class MainController extends TimerTask{
                 buildEditingView();
                 
                 // Get selected task and pass it to the editor controller
-                Task selectedTask = this.dataController.taskRepo.getTasks().
+                Task selectedTask = this.dataController.getTaskRepo().getTasks().
                         get(this.taskList.getSelectionModel().getSelectedIndex());
                 
                 editTaskController.startEditing(selectedTask);
@@ -213,6 +210,15 @@ public class MainController extends TimerTask{
                 editingTask = true;
         }
 
+        @FXML
+        protected void viewChart(ActionEvent event){
+            this.pieChartController = new PieChartController();
+            this.showingChart = true;
+            this.pieChartController.showPieChart(primaryStage, 
+                    dataController.getTaskRepo().getTasks());
+            
+            
+        }
         
         
         
@@ -346,6 +352,7 @@ public class MainController extends TimerTask{
             btnFileMenu.setVisible(true);
             btnAddTask.setVisible(true);
             btnEditTime.setVisible(true);
+            btnViewChart.setVisible(true);
             btnStart.setVisible(true);
             btnDelete.setVisible(true);
             btnClose.setVisible(true);
@@ -358,6 +365,7 @@ public class MainController extends TimerTask{
             btnAddTask.setVisible(false);
             btnDelete.setVisible(false);
             btnEditTime.setVisible(false);
+            btnViewChart.setVisible(false);
             btnStart.setVisible(false);
             btnClose.setVisible(false);
         }
@@ -517,6 +525,14 @@ public class MainController extends TimerTask{
                 if(!this.addTaskController.isIsAdding() && this.isAddingTask == true){
                     dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
                     this.endAddNewTask();
+                }
+                
+                
+                if(this.pieChartController.isDone() && this.showingChart){
+                    this.pieChartController = new PieChartController();
+                    displayMainScene();
+                    updateTaskList();
+                    this.showingChart = false;
                 }
             }
 

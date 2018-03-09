@@ -10,7 +10,7 @@
 
 <VBox fx:id="rootReadout" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="202.0" stylesheets="@../timerecorder/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <StackPane prefHeight="291.0" prefWidth="202.0" VBox.vgrow="ALWAYS">
+      <StackPane fx:id="readoutPane" prefHeight="291.0" prefWidth="202.0" VBox.vgrow="ALWAYS">
          <children>
             <Label id="lblTimerReadout" fx:id="lblTimerReadout" alignment="CENTER" contentDisplay="CENTER" prefHeight="420.0" prefWidth="360.0" textFill="#6df540">
                <font>
@@ -20,7 +20,7 @@
                   <DropShadow blurType="GAUSSIAN" />
                </effect>
                <StackPane.margin>
-                  <Insets left="15.0" right="15.0" top="15.0" bottom="5.0"/>
+                  <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
                </StackPane.margin>
             </Label>
          </children>
@@ -39,3 +39,4 @@
       </StackPane>
    </children>
 </VBox>
+    

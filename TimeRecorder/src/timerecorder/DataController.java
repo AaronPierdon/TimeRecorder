@@ -15,7 +15,7 @@ import timerecorderdatamodel.TaskRepository;
 public class DataController {
     
     // The Data model
-    protected TaskRepository taskRepo;
+    private TaskRepository taskRepo;
     
     
     public DataController(TaskRepository tasks){

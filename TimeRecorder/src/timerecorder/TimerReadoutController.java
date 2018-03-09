@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import utility.io.parse.LongToReadableTime;
 
@@ -23,12 +24,14 @@ public class TimerReadoutController{
     
     
     @FXML private VBox rootReadout;
+    @FXML private StackPane readoutPane;
     @FXML private Label lblTimerReadout;
     
     private boolean running;
     
     private ColorChanger colorChanger;
-    
+    private float opacity;
+    private boolean opacityAdding;
     
     
     public void setRunning(boolean running) {
@@ -44,6 +47,7 @@ public class TimerReadoutController{
         running = false;
         this.colorChanger = new ColorChanger();
         this.timeCounter = new TimeCounter();
+        opacity = (float) new Float(0.6);
     }
     
 
@@ -114,9 +118,26 @@ public class TimerReadoutController{
     protected void updateReadoutView(){
         // how will u make the readout updated in reponse to color changes.u
         
+        if(opacityAdding == true){
+            this.opacity += 0.01;
+            if(opacity > .9)
+                opacityAdding = false;
+        }
+            
+        
+        
+        
+        if(opacityAdding == false){
+            opacity -= 0.01;
+            if(opacity < 0.6)
+                opacityAdding = true;
+        }
+            
+
 
         rootReadout.setStyle(colorChanger.getColorSequence());
-        
+        lblTimerReadout.setOpacity(opacity);
+        System.out.println(lblTimerReadout.getOpacity());
         lblTimerReadout.setText(LongToReadableTime.getReadableTime(this.timeCounter.getTotalTime()));
         
     
