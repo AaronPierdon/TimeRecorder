@@ -26,8 +26,25 @@ public class StorageController {
         
         // This just makes sure the file exists
         File file = timerecorder.TimeRecorder.openFile();
+        System.out.println(file.getAbsoluteFile());
         if(file != null && file.exists()){
             
+            // File exists, try to deserialize into a TaskRepository object
+            TaskRepository temp = (TaskRepository) Serializer.deserialize(file);
+            if(temp != null){
+                 this.lastSavedFile = file;
+                return temp;
+            } else
+                return null;
+               
+        }else
+            // File not found
+            return null;
+    }
+    
+    public TaskRepository attemptToLoadFile(){
+        File file = new File("C:\\Users\\Aaron\\Documents\\Time Recorder\\" + "My Recorded Tasks.obj");
+            if(file.exists()){
             // File exists, try to deserialize into a TaskRepository object
             TaskRepository temp = (TaskRepository) Serializer.deserialize(file);
             if(temp != null){

@@ -20,7 +20,7 @@ public class TimeConverter {
         return secs * 60;
     }
     public static int secondsToHours(int secs){
-        return secs * 60 * 60;
+        return secs / 60 / 60;
     }
     public static int minutesToSeconds(int mins){
         return mins / 60;
@@ -29,7 +29,7 @@ public class TimeConverter {
         return mins * 60;
     }
     public static int hoursToSeconds(int hrs){
-        return hrs / 60 / 60;
+        return hrs * 60 * 60;
     }
     public static int hoursToMinutes(int hrs){
         return hrs / 60;

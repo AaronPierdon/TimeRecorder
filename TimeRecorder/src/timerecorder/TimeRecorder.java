@@ -89,6 +89,7 @@ public class TimeRecorder extends Application {
         
         }
         
+        timeRecorderFXMLController.iniTaskList();
         theScene = new Scene(root, 300, 420);
         
         theStage.setScene(theScene);
@@ -105,6 +106,7 @@ public class TimeRecorder extends Application {
     public static File saveFile(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(DEFAULTDIR);
+        fileChooser.setInitialFileName(".obj");
         File file = fileChooser.showSaveDialog(theStage);
         return file;
     }

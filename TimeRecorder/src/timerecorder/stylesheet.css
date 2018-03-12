@@ -216,6 +216,7 @@ Description :
 
 
 
+
 #root{
     -fx-background-color: derive(#000000, 60%);
     
@@ -228,9 +229,76 @@ Description :
 
 #vBoxRight{
      -fx-background-color: derive(#4b6348, 5%);
+     
+}
+
+#bubbleElement{
+    
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+
+#bubbleRoot{
+-fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    
+}
+
+
+.axis:top > .axis-label,
+.axis:left > .axis-label {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    AXIS_COLOR: derive(#3ee028,-20%);
+}
+.axis:bottom > .axis-label,
+.axis:right > .axis-label {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    AXIS_COLOR: derive(#3ee028,-20%);
+}
+.chart {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    AXIS_COLOR: derive(#3ee028,-20%);
+}
+.chart-plot-background {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    AXIS_COLOR: derive(#3ee028,-20%);
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #00cc00;
+}
+.chart-horizontal-grid-lines {
+     -fx-stroke: #00cc00;
+}
+
+.axis-tick-mark,
+.axis-minor-tick-mark {
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    -fx-fill: derive(#3ee028, 35%);
+}
+
+.chart-legend {
+   -fx-background-color: derive(#000000, 60%);
+   -fx-padding: 20px;
+   -fx-text-fill: derive(#3ee028, 35%);
 
 }
 
+.bubble-legend-symbol {
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+
+}
+
+.axis {
+    AXIS_COLOR: derive(#3ee028,-20%);
+    -fx-background-color: derive(#000000, 20%);
+}
 
 
 

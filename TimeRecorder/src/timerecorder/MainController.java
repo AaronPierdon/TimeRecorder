@@ -72,7 +72,7 @@ public class MainController extends TimerTask{
         
         private boolean isViewUpdating;
         private boolean showingChart;
-
+        
 
 
         
@@ -123,7 +123,16 @@ public class MainController extends TimerTask{
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(this, 0, 80);
             
+
+
             
+        }
+        
+        public void iniTaskList(){
+                        TaskRepository temp = storageController.attemptToLoadFile();
+            dataController.setTaskRepo(temp);
+            if(!temp.getTasks().isEmpty())
+                updateTaskList();
         }
 
         
@@ -250,7 +259,7 @@ public class MainController extends TimerTask{
 
                  this.rootWidth = root.getWidth();
                  this.rootHeight = root.getHeight();
-                 displayReadoutScene();
+                 displayReadoutScene(this.root);
            
         }
     }
@@ -335,13 +344,14 @@ public class MainController extends TimerTask{
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
                 Task tempTask = this.dataController.getTaskRepo().getTasks().get(
                    taskList.getSelectionModel().getSelectedIndex());
+
+            
                 
-                for(Long keyDdate : tempTask.getSessions().keySet()){
-                    System.out.println("Date: " + new Date(keyDdate).toString() +
-                            " Duration: " + LongToReadableTime.getReadableTime(
-                                    tempTask.getSessions().get(keyDdate)));
-                }
+                BubbleChartController bubbleController = new BubbleChartController();
+                bubbleController.displayChart(this.dataController.getTaskRepo().getTasks().get(
+                    taskList.getSelectionModel().getSelectedIndex()));
             }
+            
         }
         
         protected void endTimerReadout(){
@@ -493,6 +503,19 @@ public class MainController extends TimerTask{
             }catch(IOException e){}
        
         }
+        
+        protected void displayReadoutScene(BorderPane root){
+            
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
+         loader.setController(this.readoutController);
+
+            try{
+                root.setCenter(loader.load());
+
+            }catch(IOException e){}
+       
+        }
+        
         
         // Restores the root border pane to default
         protected void restoreRoot(){

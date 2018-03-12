@@ -6,29 +6,17 @@
 package timerecorder;
 
 import java.io.IOException;
-import java.net.URL;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.chrono.ChronoLocalDate;
 import java.util.Date;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
-import utility.io.parse.LongToReadableTime;
-import utility.io.parse.TimeConverter;
 
 /**
  * FXML Controller class
@@ -142,6 +130,7 @@ public class EditTaskController {
             
             if(cboxAddSession.isSelected()){
                 Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                
                 editedTask.addSession(taskTimeInMilli, date);
             }else
                 editedTask.addTime(taskTimeInMilli);

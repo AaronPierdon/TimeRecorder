@@ -36,7 +36,7 @@ public class PieChartController {
     
     // The tasks to assess
     private ArrayList<Task> tasks;
-    private Stage primaryStage;
+    private Stage stage;
 
     
     @FXML protected PieChart pieChart;
@@ -49,7 +49,7 @@ public class PieChartController {
     }
     
     protected void showPieChart( ArrayList<Task> tasks){
-        this.primaryStage = new Stage();
+        this.stage = new Stage();
         this.tasks = tasks;
         buildRootView();
         buildPieChart();        
@@ -127,8 +127,8 @@ public class PieChartController {
             rootPane = loader.load();
             rootPane.getStylesheets().add(getClass().getResource("/timerecorder/stylesheet.css").toString());
             Scene scene = new Scene(rootPane, 600, 600);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            stage.setScene(scene);
+            stage.show();
             
         }catch(IOException e){}
     }
@@ -137,7 +137,7 @@ public class PieChartController {
     }
     
     @FXML protected void closePieChart(ActionEvent event){
-        primaryStage.close();
+        stage.close();
         
     }
     

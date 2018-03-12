@@ -5,20 +5,13 @@
  */
 package timerecorderdatamodel;
 
-import java.awt.Desktop.Action;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import utility.io.console.PositionedConsoleOutput;
-import utility.io.getAnswer.GetMenuSelection;
-import utility.io.parse.LongToReadableTime;
-import utility.io.parse.TimeConverter;
 
 /**
  *
@@ -119,7 +112,7 @@ public class Task implements Serializable{
             // Added now
             this.sessions.put(sessionDate.getTime(), time);
         
-            
+ 
             
         }
     }
