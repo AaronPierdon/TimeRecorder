@@ -33,7 +33,7 @@
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="btnViewChart" mnemonicParsing="false" onAction="#viewChart" text="View Chart">
+                        <Button fx:id="btnViewChart" mnemonicParsing="false" onAction="#viewCharts" text="View Charts">
                            <VBox.margin>
                               <Insets bottom="10.0" />
                            </VBox.margin>

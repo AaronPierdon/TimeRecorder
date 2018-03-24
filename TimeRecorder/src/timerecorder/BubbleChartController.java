@@ -84,7 +84,7 @@ public class BubbleChartController {
         
         // Make sure there is data to work with
         if(this.theTask != null && !this.theTask.getSessions().isEmpty()){
-            buildDurationByYearMap();
+            //buildDurationByYearMap();
             
             
             // Load the x axis with the year keys from durationByYear hashmap
@@ -118,8 +118,8 @@ public class BubbleChartController {
     
 
     
-    private void buildDurationByYearMap(){
-        HashMap<Long, Long> sessions = theTask.getSessions();
+    /*private void buildDurationByYearMap(){
+       // HashMap<Long, Long> sessions = theTask.getSessions();
         
         this.durationByYear = new HashMap<>();
         
@@ -155,7 +155,7 @@ public class BubbleChartController {
 
 
     }
-    
+    */
     private NumberAxis getXAxis(){
         return new NumberAxis(getMinYear() - 2, getMaxYear() + 2, 1);
     }

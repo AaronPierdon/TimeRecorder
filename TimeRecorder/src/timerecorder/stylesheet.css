@@ -18,6 +18,12 @@ Description :
     -fx-border-insets: 2, 2, 2, 2;
 }
 
+VBox{
+        -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    
+}
+
 #pieRoot{
     
         -fx-background-color: derive(#000000, 30%);
@@ -143,15 +149,13 @@ Description :
 
 
 .menu-bar{
-    -fx-background-color: derive(#4b6348, 5%);
-    
+            -fx-background-color: derive(#000000, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
 
     
 }
 .menu-button{
-    -fx-background-color: derive(#4d634a, 20%);
-    
+            -fx-background-color: derive(#000000, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
             -fx-border-color:#333333;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
@@ -160,34 +164,34 @@ Description :
 
 
 .menu {
-            -fx-background-color: derive(#4d634a, 20%);
+    -fx-background-color: derive(#000000, 20%);
     
     -fx-text-fill: derive(#3ee028, 35%);
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
 }
 .context-menu{
     
-       -fx-background-color: derive(#4d634a, 20%);
+               -fx-background-color: derive(#000000, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
 }
 .menu-bar > .container > .menu-button:hover > .label,
 .menu-bar > .container > .menu-button:focused > .label,
 .menu-bar > .container > .menu-button:showing  > .label {
-       -fx-background-color: derive(#4d634a, 20%);
-    -fx-text-fill: derive(#3ee028, 35%);
+       -fx-background-color: derive(#000000, 50%);
+    -fx-text-fill: derive(#3ee028, 65%);
 
 }
 
 .menu-bar > .container > .menu-button > .label {
     
-    -fx-background-color: derive(#4d634a, 20%);
+      -fx-background-color: derive(#000000, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
 
     
 }
 
 .menu-item >.label {
-       -fx-background-color: derive(#4d634a, 20%);
+      -fx-background-color: derive(#000000, 20%);
     -fx-text-fill: derive(#3ee028, 35%);
 }
 
@@ -222,15 +226,9 @@ Description :
     
 }
 
-#vBoxTaskList{
-    -fx-background-color: derive(#4d634a, 30%);
-    
-}
 
-#vBoxRight{
-     -fx-background-color: derive(#4b6348, 5%);
-     
-}
+
+
 
 #bubbleElement{
     
@@ -244,6 +242,51 @@ Description :
     
 }
 
+.table-view,
+.tree-table-view {
+    /* Constants used throughout the tableview. */
+    -fx-table-header-border-color: -fx-box-border;
+    -fx-table-cell-border-color: derive(-fx-color,5%);
+    
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+    
+}
+
+
+.table-row-cell {
+    -fx-background: -fx-control-inner-background;
+    
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0;
+    -fx-background-color: derive(#000000, 20%);
+    -fx-text-fill: derive(#3ee028, 35%);
+}
+
+
+.tree-cell {
+    -fx-padding: 0.25em; /* 3 */
+    -fx-indent: 1em;
+
+}
+.tree-cell .label {
+    -fx-padding: 0.0em 0.0em 0.0em 0.25em; /* 0 0 0 3 */
+}
+.tree-cell > .tree-disclosure-node,
+.tree-table-row-cell > .tree-disclosure-node {
+    -fx-padding: 4 6 4 8;
+    -fx-background-color: transparent;
+}
+.tree-cell > .tree-disclosure-node > .arrow,
+.tree-table-row-cell > .tree-disclosure-node > .arrow {
+
+    -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
+    -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5 z";
+}
+.tree-cell:expanded > .tree-disclosure-node > .arrow,
+.tree-table-row-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-rotate: 90;
+}
 
 .axis:top > .axis-label,
 .axis:left > .axis-label {

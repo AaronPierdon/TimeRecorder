@@ -6,7 +6,10 @@
 package timerecorderdatamodel;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,7 +35,7 @@ public class Task implements Serializable{
     
     // Keeps track of the Time Performed Task Started as milliseconds since epoch and
     // Length of time in milliseconds it was performed.
-    private HashMap<Long, Long> sessions;
+    private HashMap<Calendar, Long> sessions;
     
     
     
@@ -48,6 +51,7 @@ public class Task implements Serializable{
         this.sessions = new HashMap<>();
         this.totalTime = 0;
     }
+    
     public Task(String name){
         this.taskName = name;
         this.creationDate = new Date();
@@ -86,12 +90,14 @@ public class Task implements Serializable{
             this.totalTime += time;
 
             // Record the date and time of now
-            long date = System.currentTimeMillis();
-
+            Date date = new Date(System.currentTimeMillis());
+            Calendar calDate = new GregorianCalendar();
+            calDate.setTime(date);
+            
             // Record the date and time of now along with the length of the task that was 
             // Added now
-            this.sessions.put(date, time);
-            this.lastRun = new Date(date);
+            this.sessions.put(calDate, time);
+            this.lastRun = new Date(date.getTime());
         }
 
   
@@ -110,14 +116,17 @@ public class Task implements Serializable{
 
             // Record the date and time of now along with the length of the task that was 
             // Added now
-            this.sessions.put(sessionDate.getTime(), time);
+            
+            Calendar calDate = new GregorianCalendar();
+            calDate.setTime(sessionDate);
+            this.sessions.put(calDate, time);
         
  
             
         }
     }
     
-    public HashMap<Long, Long> getSessions(){
+    public HashMap<Calendar, Long> getSessions(){
         return this.sessions;
     }
     
@@ -131,18 +140,22 @@ public class Task implements Serializable{
         
     }
     
+    
+  
     // Set this.sessions to one that is sorted by key, the time of occurrence
     public void sortSessionsByRecent(){
-         Map.Entry newEntry;
-         Map<Long, Long> map = new TreeMap<Long, Long>(this.sessions);
-         Set set2 = map.entrySet();
-         Iterator iterator2 = set2.iterator();
-         this.sessions.clear();
-         while(iterator2.hasNext()) {
-              newEntry = (Map.Entry)iterator2.next();
-              this.sessions.put((long) newEntry.getKey(), (long) newEntry.getValue());
-
-         }
+        Set set = sessions.entrySet();
+        Iterator iterator = set.iterator();
+        
+        Map<Calendar, Long> map = new TreeMap<>(sessions);
+        
+        HashMap<Calendar, Long> newSessions = new HashMap<>();
+        
+        for(Calendar keyCal : map.keySet()){
+            newSessions.put(keyCal, map.get(keyCal));
+        }
+        
+        this.sessions = newSessions;
 
     }
 

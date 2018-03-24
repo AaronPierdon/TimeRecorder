@@ -7,27 +7,14 @@
 
 package timerecorder;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import timerecorderdatamodel.Task;
 
 
@@ -36,24 +23,21 @@ public class PieChartController {
     
     // The tasks to assess
     private ArrayList<Task> tasks;
-    private Stage stage;
 
-    
-    @FXML protected PieChart pieChart;
-    @FXML protected StackPane pieRoot;
-    @FXML protected BorderPane rootPane;
+    private PieChart pieChart;
+    private StackPane pieRoot;
     
     
     public PieChartController(){
+        this.pieChart = new PieChart();
+        this.pieRoot = new StackPane();
         tasks = new ArrayList<>();
     }
     
-    protected void showPieChart( ArrayList<Task> tasks){
-        this.stage = new Stage();
+    protected StackPane getPieChart( ArrayList<Task> tasks){
         this.tasks = tasks;
-        buildRootView();
-        buildPieChart();        
-        show();
+        buildPieChart(); 
+        return pieRoot;
     }
     
     private void buildPieChart(){
@@ -70,6 +54,7 @@ public class PieChartController {
 
 
             pieChart.setData(pieChartData);
+            pieRoot.getChildren().add(pieChart);
         } 
         
         // Display no task notification
@@ -117,29 +102,10 @@ public class PieChartController {
 
     }
     
-  
-    private void buildRootView(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PieChart.fxml"));
-        
-        loader.setController(this);
-        
-        try{
-            rootPane = loader.load();
-            rootPane.getStylesheets().add(getClass().getResource("/timerecorder/stylesheet.css").toString());
-            Scene scene = new Scene(rootPane, 600, 600);
-            stage.setScene(scene);
-            stage.show();
-            
-        }catch(IOException e){}
-    }
     
-    private void show(){
-    }
+
     
-    @FXML protected void closePieChart(ActionEvent event){
-        stage.close();
-        
-    }
+ 
     
     
 }

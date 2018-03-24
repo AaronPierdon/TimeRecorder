@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="bubbleRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <right>
+   <bottom>
       <VBox fx:id="bubbleElement" alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <VBox fx:id="bubbleElement" alignment="BOTTOM_RIGHT" prefHeight="200.0" prefWidth="100.0">
@@ -15,5 +15,5 @@
             </VBox>
          </children>
       </VBox>
-   </right>
+   </bottom>
 </BorderPane>

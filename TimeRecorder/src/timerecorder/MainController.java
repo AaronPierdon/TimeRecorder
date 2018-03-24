@@ -21,18 +21,12 @@ import javafx.fxml.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.SplitPane;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import static timerecorder.TimeRecorder.theStage;
 import timerecorderdatamodel.Task;
 import timerecorderdatamodel.TaskRepository;
 import utility.io.parse.LongToReadableTime;
@@ -71,7 +65,6 @@ public class MainController extends TimerTask{
         private boolean isAddingTask;
         
         private boolean isViewUpdating;
-        private boolean showingChart;
         
 
 
@@ -91,7 +84,7 @@ public class MainController extends TimerTask{
         // When a timer is running
         private TimerReadoutController readoutController;
         
-        private PieChartController pieChartController;
+        private ChartController chartController;
 
         // 
         private EditTaskController editTaskController;
@@ -108,7 +101,7 @@ public class MainController extends TimerTask{
             this.addTaskController = new AddTaskController();
             this.readoutController = new TimerReadoutController();
             this.editTaskController = new EditTaskController();
-            this.pieChartController = new PieChartController();
+            this.chartController = new ChartController();
             
             this.rootWidth = 360;
             this.rootHeight = 420;
@@ -118,7 +111,6 @@ public class MainController extends TimerTask{
             // Set states
             editingTask = false;
             isAddingTask = false;
-            showingChart = false;
             
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(this, 0, 80);
@@ -129,7 +121,7 @@ public class MainController extends TimerTask{
         }
         
         public void iniTaskList(){
-                        TaskRepository temp = storageController.attemptToLoadFile();
+            TaskRepository temp = storageController.attemptToLoadFile();
             dataController.setTaskRepo(temp);
             if(!temp.getTasks().isEmpty())
                 updateTaskList();
@@ -229,11 +221,8 @@ public class MainController extends TimerTask{
         }
 
         @FXML
-        protected void viewChart(ActionEvent event){
-            this.pieChartController = new PieChartController();
-            this.pieChartController.showPieChart( 
-                    dataController.getTaskRepo().getTasks());
-            
+        protected void viewCharts(ActionEvent event){
+            this.chartController.showCharts(dataController.getTaskRepo().getTasks());
             
         }
         
@@ -591,7 +580,7 @@ public class MainController extends TimerTask{
                         dataController.getTaskRepo().addTask(this.addTaskController.getNewTask());
                     this.endAddNewTask();
                 }
-                
+
 
             }
 
