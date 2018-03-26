@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -22,9 +21,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeItem.TreeModificationEvent;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -55,6 +56,8 @@ public class ChartController {
         stage = new Stage();
         
         rootTreeView = new TreeView();
+        
+
     }
 
     // Entry point for passing control to the chart views and their controls
@@ -123,13 +126,41 @@ public class ChartController {
         this.rootTreeView.setCellFactory(new Callback<TreeView<String>,TreeCell<String>>(){
             @Override
             public TreeCell<String> call(TreeView<String> p) {
+                
+                // Set up event handlers for responding to tree view selections and inputs
+                p.setOnKeyPressed(new EventHandler<KeyEvent>(){
+                    @Override
+                    public void handle(KeyEvent e){
+                        if(e.getCode() == KeyCode.ENTER){
+                            TreeView tree = (TreeView) e.getSource();
+                            if(tree.getSelectionModel().getSelectedItem() != null){
+                                TreeItem<String> item = (TreeItem<String>) tree.getSelectionModel().getSelectedItem();
+                                nodeClicked(item);
+                            }
+                        }
+                    }
+                });
+                
+                p.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent e){
+                        
+                        TreeView tree = (TreeView) e.getSource();
+                        if(tree.getSelectionModel().getSelectedItem() != null){
+                            TreeItem<String> item = (TreeItem<String>) tree.
+                                    getSelectionModel().getSelectedItem();
+                            nodeClicked(item);
+                        }
+                    }
+                });
+                
+                
                 return new TreeViewFactoryImp();
             }
         });
         
 
         treeRoot.getChildren().add(rootTreeView);
-
         chartRoot.setLeft(treeRoot);
     }
 
@@ -237,19 +268,19 @@ public class ChartController {
             // Convert the ints to string months
             for(Integer month : months){
                 switch(month){
-                    case 0: monthNodes.add(new TreeItem<String>("Jan"));
+                    case 0: monthNodes.add(new TreeItem<>("Jan"));
                     break;
                     
-                    case 1: monthNodes.add(new TreeItem<String>("Feb"));
+                    case 1: monthNodes.add(new TreeItem<>("Feb"));
                     break;
                     
-                    case 2: monthNodes.add(new TreeItem<String>("Mar"));
+                    case 2: monthNodes.add(new TreeItem<>("Mar"));
                     break;
                     
-                    case 3: monthNodes.add(new TreeItem<String>("Apr"));
+                    case 3: monthNodes.add(new TreeItem<>("Apr"));
                     break;
                     
-                    case 4: monthNodes.add(new TreeItem<String>("May"));
+                    case 4: monthNodes.add(new TreeItem<>("May"));
                     break;
                     
                     case 5: monthNodes.add(new TreeItem<>("Jun"));
@@ -313,14 +344,34 @@ public class ChartController {
 
     // Called when a node is clicked... determine what type was clicked and call
     // the build view method
-    @FXML
+    
+    
+    // This handles when a node is clicked or enter is pressed while a node is selected
+    // This method will call other methods to build the appropriate chart with respect
+    // To the node that is selected
     protected void nodeClicked(TreeItem<String> clickedItem) {
         
         
         if(clickedItem.getValue().equalsIgnoreCase("tasks")){
         
             chartRoot.setCenter(new PieChartController().getPieChart(tasks));
-        } else{
+        
+        // Nest level 1, meaning a task node
+        } else if(clickedItem.getParent().getValue().equalsIgnoreCase("tasks")){
+            // Find the task that corresponds to the clicked item and send to the by year chart controller for
+            // Building the chart
+            chartRoot.setCenter(new ByYearChartController().getByYearChart(findTask(clickedItem.getValue())));
+        
+        // Nest level 2, meaning a year
+        }else if(clickedItem.getParent().getParent().getValue().equalsIgnoreCase("tasks")){
+            chartRoot.setCenter(new ByMonthController().getByMonthChart(findTask(clickedItem.getParent().getValue())));
+            
+        // Nest level 3, meaning a month
+        }else if(clickedItem.getParent().getParent().getParent().getValue().equalsIgnoreCase("tasks")){
+            chartRoot.setCenter (new ByDayController().getByDayChart(findTask(clickedItem.getParent().getParent().getValue())));
+            
+        // Unkown nest level
+        }else {
             Label lblNoData = new Label("No Data");
             VBox box = new VBox();
             box.setAlignment(Pos.CENTER);
@@ -330,6 +381,16 @@ public class ChartController {
         }
         
         
+    }
+    
+    public Task findTask(String taskName){
+        for(Task task : tasks){
+            if(task.getName().equalsIgnoreCase(taskName))
+                return task;
+        } 
+        
+        // If no match 
+        return null;
     }
 
     @FXML
@@ -363,19 +424,16 @@ public class ChartController {
                 } else {
                     setText(getString());
                     setGraphic(getTreeItem().getGraphic());
-                    this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+                    /**
+                    getTreeItem().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
                         @Override
                         public void handle(MouseEvent e){
                             nodeClicked(getTreeItem());
                         }
-                    });
+                    });*/
                     
-                    this.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>(){
-                        @Override
-                        public void handle(KeyEvent e){
-                            TreeItem<String> item = (TreeItem<String>) rootTreeView.getSelectionModel().getSelectedItem());
-                        }
-                    });
+                    
+             
                 }
         }
     }

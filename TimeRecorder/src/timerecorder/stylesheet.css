@@ -87,6 +87,7 @@ VBox{
     -fx-padding: 0.588883em 0.5em 0.666667em 0.5em; /* 7 6 8 6 */
     -fx-background-color: derive(#000000, 30%);
     -fx-background-insets: 0 0 0 0, 0 0 1 0;
+    -fx-text-fill: derive(#3ee028, 35%);
 }
 .date-picker-popup > .calendar-grid {
     -fx-background-color: derive(#002000, 20%);
@@ -114,6 +115,11 @@ VBox{
     -fx-background: -fx-control-inner-background;
     -fx-background-color: -fx-background;
     -fx-text-fill: -fx-accent;
+}
+
+.date-picker-popup > * > .spinner > .label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: derive(#3ee028, 35%);
 }
 .date-picker-popup > * > .day-cell {
     -fx-padding: 0.333333em 0.583333em 0.333333em 0.583333em; /* 4 7 4 7 */

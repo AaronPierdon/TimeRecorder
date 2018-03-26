@@ -122,9 +122,12 @@ public class MainController extends TimerTask{
         
         public void iniTaskList(){
             TaskRepository temp = storageController.attemptToLoadFile();
-            dataController.setTaskRepo(temp);
-            if(!temp.getTasks().isEmpty())
+            
+            if(temp != null && !temp.getTasks().isEmpty()){
+                dataController.setTaskRepo(temp);
                 updateTaskList();
+            }
+            
         }
 
         
