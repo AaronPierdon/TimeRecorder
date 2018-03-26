@@ -11,19 +11,27 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import timerecorderdatamodel.Task;
 
 public class ChartController {
@@ -99,16 +107,25 @@ public class ChartController {
         rootNode = addTaskNodes(rootNode);
         
         // Build Years for each task and insert into respective task
-        for(TreeItem<String> item : rootNode.getChildren()){
-            item = addYearNodes(item);
+        for(TreeItem<String> taskNode : rootNode.getChildren()){
+            taskNode = addYearNodes(taskNode);
         }
         
-        // Build and add month nodes for and to each year node in each task
-        for(TreeItem<String> )
+        // Build and add month nodes for and to Ceach year node in each task
+        for(TreeItem<String> taskNode : rootNode.getChildren()){
+             for(TreeItem<String> yearNode : taskNode.getChildren()){
+                yearNode = addMonthNodes(yearNode);
+             }
+        }
         
         
         this.rootTreeView = new TreeView<>(rootNode);
-
+        this.rootTreeView.setCellFactory(new Callback<TreeView<String>,TreeCell<String>>(){
+            @Override
+            public TreeCell<String> call(TreeView<String> p) {
+                return new TreeViewFactoryImp();
+            }
+        });
         
 
         treeRoot.getChildren().add(rootTreeView);
@@ -182,7 +199,97 @@ public class ChartController {
         return yearNodes;
     }
 
+    private TreeItem<String> addMonthNodes(TreeItem<String> yearNode){
+        // Get parent task name
+        String taskName = yearNode.getParent().getValue();
+        
+        // Index of task being analyzed
+        int taskIndex = -1;
+        
+        //Find the task being analyzed
+        for(Task task : tasks)
+            if(task.equals(taskName))
+                taskIndex = tasks.indexOf(task);
+        
+        // The year that is being analyzed
+        int sessionYear = Integer.valueOf(yearNode.getValue());
+        
+                
+        if(taskIndex >= 0){
+            ArrayList<TreeItem<String>> monthNodes = new ArrayList<>();
+        
+            ArrayList<Integer> months = new ArrayList<>();
+            
+            for(Calendar key : tasks.get(taskIndex).getSessions().keySet()){
+                boolean found = false;
+                
+                for(Integer month : months){
+                    if(key.get(Calendar.MONTH) == month)
+                        found = true;
+                }
+                
+                if(found == false && key.get(Calendar.YEAR) == sessionYear)
+                    months.add(key.get(Calendar.MONTH));
+                
+                        
+            }
+            
+            // Convert the ints to string months
+            for(Integer month : months){
+                switch(month){
+                    case 0: monthNodes.add(new TreeItem<String>("Jan"));
+                    break;
+                    
+                    case 1: monthNodes.add(new TreeItem<String>("Feb"));
+                    break;
+                    
+                    case 2: monthNodes.add(new TreeItem<String>("Mar"));
+                    break;
+                    
+                    case 3: monthNodes.add(new TreeItem<String>("Apr"));
+                    break;
+                    
+                    case 4: monthNodes.add(new TreeItem<String>("May"));
+                    break;
+                    
+                    case 5: monthNodes.add(new TreeItem<>("Jun"));
+                    break;
+                    
+                    case 6: monthNodes.add(new TreeItem<>("Jul"));
+                    break;
+                    
+                    case 7 : monthNodes.add(new TreeItem<>("Aug"));
+                    break;
+                    
+                    case 8 : monthNodes.add(new TreeItem<>("Sep"));
+                    break;
+                    
+                    case 9: monthNodes.add(new TreeItem<>("Oct"));
+                    break;
+                    
+                    case 10: monthNodes.add(new TreeItem<>("Nov"));
+                    break;
+                    
+                    case 11: monthNodes.add(new TreeItem<>("Dec"));
+                    break;
+                    
+                    default:;
+                }
+            }
+            
+            for(TreeItem<String> month : monthNodes)
+                yearNode.getChildren().add(month);
+            
+            return yearNode;
+        }
 
+        
+        return null;
+        
+    }
+
+    
+    
 
     // Called when the root tree view node is selected
     private void buildPieChartView() {
@@ -207,7 +314,21 @@ public class ChartController {
     // Called when a node is clicked... determine what type was clicked and call
     // the build view method
     @FXML
-    protected void nodeClicked(MouseEvent event) {
+    protected void nodeClicked(TreeItem<String> clickedItem) {
+        
+        
+        if(clickedItem.getValue().equalsIgnoreCase("tasks")){
+        
+            chartRoot.setCenter(new PieChartController().getPieChart(tasks));
+        } else{
+            Label lblNoData = new Label("No Data");
+            VBox box = new VBox();
+            box.setAlignment(Pos.CENTER);
+            lblNoData.setStyle("-fx-font-size: 72px");
+            box.getChildren().add(lblNoData);
+            chartRoot.setCenter(box);
+        }
+        
         
     }
 
@@ -219,7 +340,49 @@ public class ChartController {
     public boolean isDoneWithCharts() {
         return doneWithCharts;
     }
+
     
+    public class TreeViewFactoryImp extends TreeCell<String>{
 
-
+        private TextField textField;
+        
+        @Override
+        public void updateItem(String item, boolean empty){
+            super.updateItem(item, empty);
+            
+                        if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(getTreeItem().getGraphic());
+                    this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
+                        @Override
+                        public void handle(MouseEvent e){
+                            nodeClicked(getTreeItem());
+                        }
+                    });
+                    
+                    this.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>(){
+                        @Override
+                        public void handle(KeyEvent e){
+                            TreeItem<String> item = (TreeItem<String>) rootTreeView.getSelectionModel().getSelectedItem());
+                        }
+                    });
+                }
+        }
+    }
+        
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+        
+    }
 }

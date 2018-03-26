@@ -136,8 +136,6 @@ public class Task implements Serializable{
         if(time >= 0)
             this.totalTime += time;
         
- 
-        
     }
     
     
@@ -191,6 +189,10 @@ public class Task implements Serializable{
     public void setTotalTime(long time){
         
         this.totalTime = time;
+    }
+    
+    public boolean equals(String name){
+        return (this.taskName.equals(name));
     }
 
     
