@@ -15,15 +15,19 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.fxml.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -266,23 +270,64 @@ public class MainController extends TimerTask{
             if(taskList.getSelectionModel().getSelectedIndex() >= 0){
                 
                 hideAllExceptClose();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DeleteConfirmPane.fxml"));
-                
-                loader.setController(this);
-                
-                try{
-                    StackPane confirmPane = loader.load();
-                    confirmPane.setPrefSize(200, 80);
-                    confirmPane.setPadding(new Insets(0, 0, 5, 0));
-                    vBoxTaskList.getChildren().add(confirmPane);
-                    
-                }catch(IOException e){
-                
-                    System.out.println(e.toString());
 
-                    // Revert to task list view
-                    restoreRoot();
-                }
+                    VBox confirmPane = new VBox();
+                    confirmPane.setAlignment(Pos.BOTTOM_CENTER);
+                    
+                    VBox confirmPaneHolder = new VBox();
+                    confirmPaneHolder.setAlignment(Pos.CENTER);
+                    
+                    
+                    Button btnConfirm = new Button("Confirm");
+                    
+                    btnConfirm.addEventHandler(MouseEvent.MOUSE_CLICKED, new 
+                        EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent e){
+                                confirmedDelete();
+                                restoreRoot();
+                            }
+                        });
+                    
+                    
+                    Button btnCancel = new Button("Cancel");
+                    btnCancel.addEventHandler(MouseEvent.MOUSE_CLICKED, 
+                            new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent e){
+                                    cancelDelete();
+                                }
+                            });
+                    
+                    HBox btnBox = new HBox();
+                    btnBox.setPadding(new Insets(5, 5, 5, 5));
+                    btnBox.setSpacing(5);
+                    btnBox.setAlignment(Pos.BOTTOM_RIGHT);
+                    btnBox.getChildren().addAll(btnConfirm, btnCancel);
+                    btnBox.setStyle("-fx-background-color: transparent;");
+                    
+                    
+                    
+                    Label lblConfirm = new Label("Are you sure?");
+                    lblConfirm.setStyle("-fx-font-size: 24;");
+                    VBox lblBox = new VBox();
+                    lblBox.setAlignment(Pos.TOP_CENTER);
+                    lblBox.getChildren().add(lblConfirm);
+                    
+                    confirmPaneHolder.setFillWidth(true);
+                    confirmPaneHolder.setPadding(new Insets(0, 0, 5, 5));
+                    confirmPaneHolder.setStyle("-fx-background-color: transparent;");
+                    
+                    
+                    confirmPane.getChildren().add(btnBox);
+                    confirmPane.setPrefHeight(rootHeight);
+                    confirmPane.setPrefWidth(rootWidth);
+                    
+                    confirmPaneHolder.setPrefWidth(176);
+                    confirmPaneHolder.setPrefHeight(337);
+                    confirmPaneHolder.getChildren().addAll(lblBox, confirmPane);
+                    
+                    this.root.setCenter(confirmPaneHolder);
                 
             
             }
@@ -290,11 +335,11 @@ public class MainController extends TimerTask{
     
                 
         //  //  //  //
-        // Confirm Delete FXML Handlers //
+        // Confirm Delete  Handlers //
         //  //  //  //
         
-        @FXML
-        protected void confirmedDelete(ActionEvent event){
+
+        private void confirmedDelete(){
             dataController.removeTask(taskList.getSelectionModel().getSelectedIndex());
             
             vBoxTaskList.getChildren().clear();
@@ -303,13 +348,10 @@ public class MainController extends TimerTask{
             updateTaskList();
             showControls();
         }
-        
-        @FXML
-        protected void cancelDelete(ActionEvent event){
+
+        private void cancelDelete(){
             // Revert to task list view
-            vBoxTaskList.getChildren().clear();
-            vBoxTaskList.setAlignment(Pos.TOP_LEFT);
-            vBoxTaskList.getChildren().add(taskList);
+            restoreRoot();
             updateTaskList();
             showControls();
         }

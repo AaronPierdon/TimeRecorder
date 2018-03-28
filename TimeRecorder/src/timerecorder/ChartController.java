@@ -1,7 +1,7 @@
 /*
  * Developers: Aaron Pierdon
  * Date: Mar 13, 2018
- * Description :
+ * Description : 
  * 
  */
 package timerecorder;
@@ -364,8 +364,8 @@ public class ChartController {
         
         // Nest level 2, meaning a year
         }else if(clickedItem.getParent().getParent().getValue().equalsIgnoreCase("tasks")){
-            chartRoot.setCenter(new ByMonthController().getByMonthChart(findTask(clickedItem.getParent().getValue())));
-            
+            chartRoot.setCenter(new ByMonthController().getByMonthChart(findTask(clickedItem.getParent().getValue()),
+                    clickedItem.getValue()));
         // Nest level 3, meaning a month
         }else if(clickedItem.getParent().getParent().getParent().getValue().equalsIgnoreCase("tasks")){
             chartRoot.setCenter (new ByDayController().getByDayChart(findTask(clickedItem.getParent().getParent().getValue())));

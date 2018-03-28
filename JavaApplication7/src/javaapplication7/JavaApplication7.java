@@ -21,9 +21,9 @@ public class JavaApplication7 {
         HashMap<String, Long> ba = new HashMap<>();
         
         
-        ba.put("2017", (ba.get("2017") + 20L));
+        double a = 600 / 60 / 8;
         
-        System.out.println(ba.get("2017"));
+        System.out.println(a);
     }
     
 }

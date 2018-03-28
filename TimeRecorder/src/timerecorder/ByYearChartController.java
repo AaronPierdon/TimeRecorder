@@ -16,12 +16,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
+import utility.io.parse.TimeConverter;
 
 
 public class ByYearChartController {
@@ -65,13 +67,18 @@ public class ByYearChartController {
         
         // Build the XYChart data
         for(String year : years){
-           
-            series1.getData().add(new XYChart.Data(year, chartMap.get(year)));
+            // Convert duration to hours
+            long raw = chartMap.get(year);
+            int dur = (int) raw;
+            int duration = TimeConverter.secondsToHours(dur / 1000);
+            series1.getData().add(new XYChart.Data(year, duration));
         }
         
         // Add xychart data to the chart
         chart.getData().add(series1);
 
+        chart.setLegendVisible(false);
+        chart.setCategoryGap(80);
         return chart;
     }
     
