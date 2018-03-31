@@ -37,17 +37,7 @@ public class ByYearChartController {
     public BarChart getByYearChart(Task task){
         this.theTask = task;
         
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Years");
-        
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Total Time");
-        
-        // Build the bar chart
-        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
 
-        
-        XYChart.Series series1  = new XYChart.Series();
         
         // Build the data model
         HashMap<String, Long> chartMap = getDurationByYearMap();
@@ -65,6 +55,33 @@ public class ByYearChartController {
         Collections.sort(years);       
         
         
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Years");
+        
+        Long max = 0L;
+        for(String key : chartMap.keySet()){
+            if(chartMap.get(key) > max)
+                max = chartMap.get(key);
+        }
+      
+        // Get seconds from the milliseconds in max
+        max /= 1000;
+        
+        // convert to int
+        int intMax = max.intValue();
+       
+        
+        intMax = TimeConverter.secondsToHours(intMax);
+        intMax *= 10;
+        NumberAxis yAxis = new NumberAxis((double) 0, (double)intMax, (double) 100);
+        yAxis.setLabel("Total Time");
+        
+        // Build the bar chart
+        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
+
+        
+        XYChart.Series series1  = new XYChart.Series();
+        
         // Build the XYChart data
         for(String year : years){
             // Convert duration to hours
@@ -76,7 +93,6 @@ public class ByYearChartController {
         
         // Add xychart data to the chart
         chart.getData().add(series1);
-
         chart.setLegendVisible(false);
         chart.setCategoryGap(80);
         return chart;

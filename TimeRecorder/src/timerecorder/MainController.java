@@ -133,7 +133,13 @@ public class MainController extends TimerTask{
             }
             
         }
-
+        
+        public void iniTasks(){
+            TaskRepository taskRepo = new TaskRepository();
+            taskRepo.setTasks(new TaskGenerator().getSomeTasks());
+            dataController.setTaskRepo(taskRepo);
+            updateTaskList();
+        }
         
         // Action Handlers //
         //                 //

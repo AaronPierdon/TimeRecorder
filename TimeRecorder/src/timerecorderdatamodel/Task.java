@@ -126,6 +126,16 @@ public class Task implements Serializable{
         }
     }
     
+    public void addSession(long time, Calendar sessionDate){
+        
+        if(time >= 0){
+            this.totalTime += time;
+            
+            
+            this.sessions.put(sessionDate, time);
+        }
+    }
+    
     public HashMap<Calendar, Long> getSessions(){
         return this.sessions;
     }

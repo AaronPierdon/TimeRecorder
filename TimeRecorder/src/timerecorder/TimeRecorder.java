@@ -91,7 +91,8 @@ public class TimeRecorder extends Application {
         
         //timeRecorderFXMLController.iniTaskList();
         theScene = new Scene(root, 300, 420);
-        timeRecorderFXMLController.iniTaskList();
+        //timeRecorderFXMLController.iniTaskList();
+        timeRecorderFXMLController.iniTasks();
         theStage.setScene(theScene);
     }
     
