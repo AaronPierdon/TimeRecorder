@@ -31,7 +31,7 @@ public class TaskGenerator {
             
             // get dates
             for(int counter2 = new Random().nextInt(1000); counter2 >= 0; counter2--){
-                newTask.addSession(new Random().nextInt(21600000), getCal());
+                newTask.addSession(new Random().nextInt(86_400_000), getCal());
             }
             
             tasks.add(newTask);

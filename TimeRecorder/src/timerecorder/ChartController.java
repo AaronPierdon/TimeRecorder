@@ -355,8 +355,9 @@ public class ChartController {
                     clickedItem.getValue()));
         // Nest level 3, meaning a month
         }else if(clickedItem.getParent().getParent().getParent().getValue().equalsIgnoreCase("tasks")){
+            int year = Integer.valueOf(clickedItem.getParent().getValue());
             chartRoot.setCenter (new ByDayController().getChart(findTask(clickedItem.getParent().getParent().getValue()),
-                    CalendarParser.getMonthInt(clickedItem.getValue())));
+                    CalendarParser.getMonthInt(clickedItem.getValue()), year));
             
         // Unkown nest level
         }else {
