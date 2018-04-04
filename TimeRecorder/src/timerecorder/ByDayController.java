@@ -7,22 +7,12 @@
 
 package timerecorder;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.chart.BubbleChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import timerecorderdatamodel.Task;
 import utility.io.parse.TimeConverter;
 import utility.stringUtility.CalendarParser;
@@ -63,7 +53,6 @@ public class ByDayController {
             
             for(Calendar calKey : sessions.keySet()){
                 if(theMonth == calKey.get(Calendar.MONTH)){
-                    
                     System.out.println(calKey.get(Calendar.DAY_OF_WEEK));
                     System.out.println(sessions.get(calKey));
                     series1.getData().add(new XYChart.Data((calKey.get(Calendar.DAY_OF_MONTH) / 1000), 
