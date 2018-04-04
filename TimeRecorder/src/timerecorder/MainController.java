@@ -41,7 +41,7 @@ public class MainController extends TimerTask{
         long miliime;
     
         // Main GUI elements that need to be altered or used
-        @FXML private Button  btnAddTask, btnEditTime, btnViewSessions, btnViewChart,
+        @FXML private Button  btnAddTask, btnEditTime, btnViewChart,
                 btnDelete, btnStart, btnClose;
         
         @FXML private MenuBar btnFileMenu;
@@ -378,21 +378,7 @@ public class MainController extends TimerTask{
             isViewUpdating = false;
         }
         
-        @FXML 
-        protected void viewSessions(ActionEvent event){
-            // Make sure a task is selected
-            if(taskList.getSelectionModel().getSelectedIndex() >= 0){
-                Task tempTask = this.dataController.getTaskRepo().getTasks().get(
-                   taskList.getSelectionModel().getSelectedIndex());
-
-            
-                
-                BubbleChartController bubbleController = new BubbleChartController();
-                bubbleController.displayChart(this.dataController.getTaskRepo().getTasks().get(
-                    taskList.getSelectionModel().getSelectedIndex()));
-            }
-            
-        }
+     
         
         protected void endTimerReadout(){
             
@@ -441,7 +427,6 @@ public class MainController extends TimerTask{
             btnFileMenu.setVisible(true);
             btnAddTask.setVisible(true);
             btnEditTime.setVisible(true);
-            btnViewSessions.setVisible(true);
             btnViewChart.setVisible(true);
             btnStart.setVisible(true);
             btnDelete.setVisible(true);
@@ -455,7 +440,6 @@ public class MainController extends TimerTask{
             btnAddTask.setVisible(false);
             btnDelete.setVisible(false);
             btnEditTime.setVisible(false);
-            btnViewSessions.setVisible(false);
             btnViewChart.setVisible(false);
             btnStart.setVisible(false);
             btnClose.setVisible(false);
@@ -466,7 +450,6 @@ public class MainController extends TimerTask{
             btnAddTask.setVisible(false);
             btnDelete.setVisible(false);
             btnEditTime.setVisible(false);
-            btnViewSessions.setVisible(false);
             btnViewChart.setVisible(false);
             btnStart.setVisible(false);
         }

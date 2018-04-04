@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import timerecorderdatamodel.Task;
+import utility.stringUtility.CalendarParser;
 
 public class ChartController {
 
@@ -327,20 +328,6 @@ public class ChartController {
         chartRoot.setCenter(new PieChartController().getPieChart(tasks));
     }
 
-    // Called when a task node is selected
-    private void buildTaskChartView() {
-
-    }
-
-    // Called when a year node is selected
-    private void buildYearChartView() {
-
-    }
-
-    // Called when a month node is selected
-    private void buildMonthChartView() {
-
-    }
 
     // Called when a node is clicked... determine what type was clicked and call
     // the build view method
@@ -368,7 +355,8 @@ public class ChartController {
                     clickedItem.getValue()));
         // Nest level 3, meaning a month
         }else if(clickedItem.getParent().getParent().getParent().getValue().equalsIgnoreCase("tasks")){
-            chartRoot.setCenter (new ByDayController().getByDayChart(findTask(clickedItem.getParent().getParent().getValue())));
+            chartRoot.setCenter (new ByDayController().getChart(findTask(clickedItem.getParent().getParent().getValue()),
+                    CalendarParser.getMonthInt(clickedItem.getValue())));
             
         // Unkown nest level
         }else {
