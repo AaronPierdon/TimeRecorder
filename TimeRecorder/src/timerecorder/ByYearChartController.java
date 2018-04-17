@@ -66,13 +66,14 @@ public class ByYearChartController {
       
         // Get seconds from the milliseconds in max
         max /= 1000;
-        
+        max *= 10;
         // convert to int
         int intMax = max.intValue();
        
         
         intMax = TimeConverter.secondsToHours(intMax);
-        intMax *= 10;
+   
+
         NumberAxis yAxis = new NumberAxis((double) 0, (double)intMax, (double) 100);
         yAxis.setLabel("Total Time");
         
@@ -84,10 +85,16 @@ public class ByYearChartController {
         
         // Build the XYChart data
         for(String year : years){
-            // Convert duration to hours
-            long raw = chartMap.get(year);
-            int dur = (int) raw;
-            int duration = TimeConverter.secondsToHours(dur / 1000);
+            // Get the total duration in milli
+            Long rawValue = chartMap.get(year);
+            
+            // Convert to seconds
+            rawValue /= 1000;
+            // Convert to int
+            int dur = rawValue.intValue();
+            // Convert seconds to hours
+            int duration = TimeConverter.secondsToHours(dur);
+            // Add the year/duration data
             series1.getData().add(new XYChart.Data(year, duration));
         }
         
@@ -112,8 +119,9 @@ public class ByYearChartController {
             if(durationsByYear.containsKey(year)){
                 // Add the old vlaue to the new value for the key keyCal that 
                 // corresponds to the sessions hashmap
+
                 durationsByYear.put(year, (durationsByYear.get(year) + sessions.get(keyCal)));
-                
+
             } else{
                 durationsByYear.put(year, sessions.get(keyCal));
             }
