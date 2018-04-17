@@ -24,16 +24,19 @@ public class ByDayController {
     private Task theTask;
     // 0 for January. This the month for which to display recorded sesssions
     private int theMonth;
+    private int theYear;
+    private long maxDuration;
     protected BubbleChart<Number, Number> chart;
     
   
     
-    protected BubbleChart getChart(Task task, int month){
+    protected BubbleChart getChart(Task task, int month, int year){
         this.theTask = task;
         this.theMonth = month;
-    
+        this.theYear = year;
+        this.maxDuration = 86_400_000;
+        
             buildChart();
-
             addData();
 
         return chart;
@@ -51,13 +54,21 @@ public class ByDayController {
             
             HashMap<Calendar, Long> sessions = theTask.getSessions();
             
+            
             for(Calendar calKey : sessions.keySet()){
-                if(theMonth == calKey.get(Calendar.MONTH)){
-                    System.out.println(calKey.get(Calendar.DAY_OF_WEEK));
-                    System.out.println(sessions.get(calKey));
-                    series1.getData().add(new XYChart.Data((calKey.get(Calendar.DAY_OF_MONTH) / 1000), 
-                        sessions.get(calKey)));
-                }}
+                if(theMonth == calKey.get(Calendar.MONTH) && 
+                        theYear == calKey.get(Calendar.YEAR)){
+                    int day = calKey.get(Calendar.DAY_OF_MONTH);
+                    long duration = sessions.get(calKey);
+                    
+                    series1.getData().add(new XYChart.Data(day, 
+                            (TimeConverter.secondsToHours(TimeConverter.milliToSeconds(duration))),
+                        getPercentageOfMax(duration)));
+                    System.out.println(series1.getData());
+                }
+            }
+            
+            
 
            
            
@@ -76,7 +87,7 @@ public class ByDayController {
             NumberAxis xAxis = new NumberAxis(0, 31, 1);
             
             // Load the y axis with the min and max values from the durationByyear
-            NumberAxis yAxis = new NumberAxis();
+            NumberAxis yAxis = new NumberAxis(0, 24, .5);
 
             // Style axes
             xAxis.setTickLabelFill(Color.rgb(0, 255, 0));
@@ -101,6 +112,31 @@ public class ByDayController {
         
     }
 
+
+    
+    private double getPercentageOfMax(long duration){
+        
+        // Convert long milliseconds to double hours
+        if(duration > 0){
+            System.out.println(duration);
+              duration = duration / 1000 / 60 / 60;
+            double maxDur = this.maxDuration / 1000 / 60 / 60;
+
+            // Turn the percentage into a whole number by shifting two decimal places
+            // to the left and rounding the resulting number. Then turn the rounded number
+            // back into a decimal by dividing by 100
+
+
+            System.out.println("dur: " + duration + " max: " + maxDur);
+            double unRounded = duration / maxDur;
+            double rounded = Math.round(unRounded * 100.0) / 100.0;
+            System.out.println(rounded);
+            return rounded;
+        } else
+            return 0;
+  
+    
+    }
     
     private int getHours(long time){
         int timeInSeconds = (int) time / 1000;

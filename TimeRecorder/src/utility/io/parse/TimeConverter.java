@@ -34,5 +34,11 @@ public class TimeConverter {
     public static int hoursToMinutes(int hrs){
         return hrs / 60;
     }
+    
+    public static int milliToSeconds(long milli){
+        Long num = milli / 1000;
+        return num.intValue();
+        
+    }
 
 }
