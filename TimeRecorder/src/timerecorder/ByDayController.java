@@ -92,7 +92,7 @@ public class ByDayController {
             // Style axes
             xAxis.setTickLabelFill(Color.rgb(0, 255, 0));
             yAxis.setTickLabelFill(Color.rgb(0, 255, 0));
-            xAxis.setLabel("Year");
+            xAxis.setLabel("Day of Month (" + CalendarParser.getMonthString(theMonth) + ")");
             yAxis.setLabel("Duration\r\nin Hours");
             
             
@@ -101,7 +101,7 @@ public class ByDayController {
             this.chart.setStyle("-fx-background-color: #000000");
             this.chart.setStyle("-fx-text-fill: #3ee028");
             this.chart.setTitle("Activity by Day");
-
+            this.chart.setLegendVisible(false);
 
             
         

@@ -137,7 +137,6 @@ public class TimerReadoutController{
 
         rootReadout.setStyle(colorChanger.getColorSequence());
         lblTimerReadout.setOpacity(opacity);
-        System.out.println(lblTimerReadout.getOpacity());
         lblTimerReadout.setText(LongToReadableTime.getReadableTime(this.timeCounter.getTotalTime()));
         
     

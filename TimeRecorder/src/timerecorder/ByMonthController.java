@@ -43,7 +43,9 @@ public class ByMonthController {
         
         
         
+        
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
+        chart.setLegendVisible(false);
         XYChart.Series series  = new XYChart.Series();
         
         HashMap<String, Long> chartMap = getByMonthMap();

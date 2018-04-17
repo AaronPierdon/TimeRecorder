@@ -261,7 +261,7 @@ public class MainController extends TimerTask{
 
                  this.rootWidth = root.getWidth();
                  this.rootHeight = root.getHeight();
-                 displayReadoutScene(this.root);
+                 displayReadoutScene();
            
         }
     }
@@ -520,6 +520,8 @@ public class MainController extends TimerTask{
 
             try{
                 VBox newRoot = loader.load();
+                newRoot.setPrefHeight(rootHeight);
+                newRoot.setPrefWidth(rootWidth);
                 Scene scene = new Scene(newRoot);
                 this.primaryStage.setScene(scene);
 
