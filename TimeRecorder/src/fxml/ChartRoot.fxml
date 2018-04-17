@@ -12,7 +12,7 @@
          <children>
             <VBox alignment="BOTTOM_RIGHT">
                <children>
-                  <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" text="Button">
+                  <Button fx:id="btnClose" mnemonicParsing="false" onAction="#close" text="Close">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Button>
