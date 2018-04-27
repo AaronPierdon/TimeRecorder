@@ -259,8 +259,8 @@ public class MainController extends TimerTask{
                  this.isTimerRunning = true;
                  this.isViewUpdating = false;
 
-                 this.rootWidth = root.getWidth();
-                 this.rootHeight = root.getHeight();
+                 this.rootWidth = taskList.getWidth();
+                 this.rootHeight = taskList.getHeight();
                  displayReadoutScene();
            
         }
@@ -529,17 +529,6 @@ public class MainController extends TimerTask{
        
         }
         
-        protected void displayReadoutScene(BorderPane root){
-            
-         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
-         loader.setController(this.readoutController);
-
-            try{
-                root.setCenter(loader.load());
-
-            }catch(IOException e){}
-       
-        }
         
         
         // Restores the root border pane to default
@@ -599,8 +588,19 @@ public class MainController extends TimerTask{
                 // If a timer has stopped and this.isTimerRunning reflects that it is 
                 // still running
                 if(this.readoutController.isRunning() && this.isTimerRunning == true){
-                    if(this.readoutController.getReadoutView() != null)
+                    if(this.readoutController.getReadoutView() != null){
                         updateTimerReadout();
+                        if(this.readoutController.isAlwaysOnTopChange()){
+                            boolean state = this.primaryStage.isAlwaysOnTop();
+                            if(state)
+                                primaryStage.setAlwaysOnTop(false);
+                            else
+                                primaryStage.setAlwaysOnTop(true);
+                            
+                            //reset the flag
+                            this.readoutController.setAlwaysOnTopChange(false);
+                        }
+                    }
                 }else if(!this.readoutController.isRunning() && this.isTimerRunning == true){
                     this.isTimerRunning = false;
                     endTimerReadout();

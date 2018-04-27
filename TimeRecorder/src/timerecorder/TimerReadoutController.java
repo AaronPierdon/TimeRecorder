@@ -9,7 +9,11 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import utility.io.parse.LongToReadableTime;
@@ -26,8 +30,19 @@ public class TimerReadoutController{
     @FXML private VBox rootReadout;
     @FXML private StackPane readoutPane;
     @FXML private Label lblTimerReadout;
+    @FXML private StackPane panePins;
+    @FXML private Button asd;
     
     private boolean running;
+    private boolean alwaysOnTopChange;
+
+    public void setAlwaysOnTopChange(boolean alwaysOnTopChange) {
+        this.alwaysOnTopChange = alwaysOnTopChange;
+    }
+
+    public boolean isAlwaysOnTopChange() {
+        return alwaysOnTopChange;
+    }
     
     private ColorChanger colorChanger;
     private float opacity;
@@ -35,6 +50,7 @@ public class TimerReadoutController{
     
     
     public void setRunning(boolean running) {
+        this.alwaysOnTopChange = false;
         this.running = running;
     }
 
@@ -45,9 +61,12 @@ public class TimerReadoutController{
     
     public TimerReadoutController(){
         running = false;
+        this.alwaysOnTopChange = false;
         this.colorChanger = new ColorChanger();
         this.timeCounter = new TimeCounter();
         opacity = (float) new Float(0.6);
+        
+
     }
     
 
@@ -77,6 +96,11 @@ public class TimerReadoutController{
         this.running = false;
         this.cancelTimer();
     }
+    
+    @FXML
+    protected void alwaysOnTop(MouseEvent event){
+            this.alwaysOnTopChange = true;
+    }
         
     public void cancelTimer(){
         if(running == true){
@@ -93,8 +117,10 @@ public class TimerReadoutController{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TimerReadout.fxml"));
         
         loader.setController(this);
+        
         try{
            this.rootReadout = loader.load();
+
         }catch(IOException e){
             System.out.println("failed");
         }

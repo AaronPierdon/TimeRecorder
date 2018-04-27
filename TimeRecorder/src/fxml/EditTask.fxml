@@ -12,75 +12,83 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="231.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <VBox>
          <children>
-            <Label text="Task Name" />
-            <TextField id="txtNameInput" fx:id="txtNameInput" onMouseClicked="#textClicked" promptText="Name (Blank if Same)" />
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <GridPane>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="lblHours" text="Hours" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <Label fx:id="lblMinutes" text="Minutes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <Label fx:id="lblSeconds" text="Seconds" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                  <TextField fx:id="txtHours" onMouseClicked="#textClicked" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtMinutes" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtSeconds" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label text="Task Name" />
+                  <TextField id="txtNameInput" fx:id="txtNameInput" alignment="CENTER" onMouseClicked="#textClicked" promptText="Name (Blank if Same)" VBox.vgrow="NEVER" />
                </children>
-            </GridPane>
-         </children>
-      </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <CheckBox fx:id="cboxAddSession" mnemonicParsing="false" onMouseClicked="#toggleDatePicker" text="Add As Session?">
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label fx:id="lblHours" text="Hours" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label fx:id="lblMinutes" text="Minutes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label fx:id="lblSeconds" text="Seconds" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <TextField fx:id="txtHours" alignment="CENTER" onMouseClicked="#textClicked" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtMinutes" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtSeconds" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <CheckBox fx:id="cboxAddTime" mnemonicParsing="false" text="Add Time?" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <CheckBox fx:id="cboxAddSession" mnemonicParsing="false" onMouseClicked="#toggleDatePicker" text="Add As Session?">
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="10.0" />
+                     </VBox.margin>
+                  </CheckBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <DatePicker fx:id="datePicker" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets bottom="5.0" top="5.0" />
+                     </opaqueInsets>
+                  </HBox>
+               </children>
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" top="10.0" />
+                  <Insets top="15.0" />
                </VBox.margin>
-            </CheckBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            </VBox>
+            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <DatePicker fx:id="datePicker" />
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="90.0" prefWidth="231.0">
+                     <children>
+                        <Button id="btnConfirmEdit" fx:id="btnAddTime" mnemonicParsing="false" onAction="#confirmEdit" text="Apply Edit">
+                           <HBox.margin>
+                              <Insets bottom="1.0" right="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button id="btnConfirmEdit" fx:id="btnCancelEdit" mnemonicParsing="false" onAction="#cancelEdit" text="Cancel">
+                           <HBox.margin>
+                              <Insets bottom="1.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-               <opaqueInsets>
-                  <Insets bottom="5.0" top="5.0" />
-               </opaqueInsets>
-            </HBox>
+            </VBox>
          </children>
          <VBox.margin>
-            <Insets top="15.0" />
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
          </VBox.margin>
-      </VBox>
-      <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-         <children>
-            <HBox alignment="BOTTOM_CENTER" prefHeight="90.0" prefWidth="231.0">
-               <children>
-                  <Button id="btnConfirmEdit" fx:id="btnAddTime" mnemonicParsing="false" onAction="#confirmEdit" text="Add Time">
-                     <HBox.margin>
-                        <Insets bottom="1.0" right="5.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button id="btnConfirmEdit" fx:id="btnCancelEdit" mnemonicParsing="false" onAction="#cancelEdit" text="Cancel">
-                     <HBox.margin>
-                        <Insets bottom="1.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
       </VBox>
    </children>
 </VBox>

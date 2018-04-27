@@ -4,12 +4,27 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox fx:id="rootReadout" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="202.0" stylesheets="@../timerecorder/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <StackPane fx:id="panePins" alignment="BOTTOM_LEFT">
+         <children>
+            <Button fx:id="btnPin" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onMouseClicked="#alwaysOnTop" style="-fx-background-color: transparent; -fx-border-color: transparent;" text="Button">
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/tack.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </StackPane>
       <StackPane fx:id="readoutPane" prefHeight="291.0" prefWidth="202.0" VBox.vgrow="ALWAYS">
          <children>
             <Label id="lblTimerReadout" fx:id="lblTimerReadout" alignment="CENTER" contentDisplay="CENTER" prefHeight="420.0" prefWidth="360.0" textFill="#6df540">
@@ -39,4 +54,3 @@
       </StackPane>
    </children>
 </VBox>
-    
