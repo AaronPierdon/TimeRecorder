@@ -24,7 +24,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <GridPane>
+                  <GridPane fx:id="addTimeControls">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -42,7 +42,7 @@
                         <TextField fx:id="txtHours" alignment="CENTER" onMouseClicked="#textClicked" GridPane.rowIndex="2" />
                         <TextField fx:id="txtMinutes" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtSeconds" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <CheckBox fx:id="cboxAddTime" mnemonicParsing="false" text="Add Time?" />
+                        <CheckBox fx:id="cboxAddTime" mnemonicParsing="false" onMouseClicked="#toggleTimeAdder" text="Add Time?" />
                      </children>
                   </GridPane>
                </children>

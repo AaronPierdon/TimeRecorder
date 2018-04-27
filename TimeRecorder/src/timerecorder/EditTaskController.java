@@ -13,8 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
 
@@ -27,9 +29,12 @@ public class EditTaskController {
 
 
     @FXML private TextField txtNameInput, txtHours, txtMinutes, txtSeconds;
-    @FXML CheckBox cboxAddSession;
+    @FXML private Label lblHours, lblMinutes, lblSeconds;
+    
+    @FXML CheckBox cboxAddSession, cboxAddTime;
+    
     @FXML DatePicker datePicker;
-
+    
     
     private Task editedTask;
 
@@ -64,6 +69,7 @@ public class EditTaskController {
       
             VBox editor = loader.load();
             datePicker.setVisible(false);
+            showTimeAdder(false);
             // Now that the fxml controls are loaded, set the factories to the 
             // Spinners
             
@@ -181,6 +187,21 @@ public class EditTaskController {
             datePicker.setVisible(true);
         if(!cboxAddSession.isSelected())
             datePicker.setVisible(false);
+    }
+    
+    @FXML
+    protected void toggleTimeAdder(MouseEvent event){
+        showTimeAdder(cboxAddTime.isSelected());
+    }
+    
+    private void showTimeAdder(boolean show){
+        this.lblHours.setVisible(show);
+        this.lblMinutes.setVisible(show);
+        this.lblSeconds.setVisible(show);
+        this.txtHours.setVisible(show);
+        this.txtMinutes.setVisible(show);
+        this.txtSeconds.setVisible(show);
+        cboxAddSession.setVisible(show);
     }
 
 
