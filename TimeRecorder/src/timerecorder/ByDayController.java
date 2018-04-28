@@ -93,7 +93,7 @@ public class ByDayController {
             xAxis.setTickLabelFill(Color.rgb(0, 255, 0));
             yAxis.setTickLabelFill(Color.rgb(0, 255, 0));
             xAxis.setLabel("Day of Month (" + CalendarParser.getMonthString(theMonth) + ")");
-            yAxis.setLabel("Duration\r\nin Hours");
+            yAxis.setLabel("Duration\r\n (Hours)");
             
             
             // Set up the chart

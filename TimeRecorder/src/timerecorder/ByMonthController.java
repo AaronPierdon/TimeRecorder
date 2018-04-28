@@ -35,10 +35,10 @@ public class ByMonthController {
         this.theYear = Integer.valueOf(year);
         
         CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Month");
+        xAxis.setLabel("Month of " + year);
         
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Total Time");
+        yAxis.setLabel("Total Time\r\n  (Hours)");
         
         
         

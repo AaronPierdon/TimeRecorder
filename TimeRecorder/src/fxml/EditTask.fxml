@@ -24,7 +24,7 @@
             </VBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <GridPane fx:id="addTimeControls">
+                  <GridPane fx:id="timeControlsGrid">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -34,15 +34,19 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <Label fx:id="lblHours" text="Hours" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label fx:id="lblMinutes" text="Minutes" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                         <Label fx:id="lblSeconds" text="Seconds" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <TextField fx:id="txtHours" alignment="CENTER" onMouseClicked="#textClicked" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtMinutes" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtSeconds" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtHours" alignment="CENTER" onMouseClicked="#textClicked" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtMinutes" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="txtSeconds" alignment="CENTER" onMouseClicked="#textClicked" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                         <CheckBox fx:id="cboxAddTime" mnemonicParsing="false" onMouseClicked="#toggleTimeAdder" text="Add Time?" />
+                        <Label fx:id="lblHrError" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label fx:id="lblMinError" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label fx:id="lblSecError" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
                </children>

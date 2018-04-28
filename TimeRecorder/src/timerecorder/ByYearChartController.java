@@ -75,7 +75,7 @@ public class ByYearChartController {
    
 
         NumberAxis yAxis = new NumberAxis((double) 0, (double)intMax, (double) 100);
-        yAxis.setLabel("Total Time");
+        yAxis.setLabel("Total Time\r\n  (Hours)");
         
         // Build the bar chart
         BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);

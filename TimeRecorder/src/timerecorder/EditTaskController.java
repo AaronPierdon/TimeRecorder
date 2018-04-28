@@ -29,7 +29,8 @@ public class EditTaskController {
 
 
     @FXML private TextField txtNameInput, txtHours, txtMinutes, txtSeconds;
-    @FXML private Label lblHours, lblMinutes, lblSeconds;
+    @FXML private Label lblHours, lblMinutes, lblSeconds, lblHrError, lblMinError, lblSecError;
+    @FXML private GridPane timeControlsGrid;
     
     @FXML CheckBox cboxAddSession, cboxAddTime;
     
@@ -126,38 +127,112 @@ public class EditTaskController {
     
     @FXML
     protected void confirmEdit(ActionEvent event){
+        // Get Integer Values for the string input
+        int sec = 0;
+        int min = 0; 
+        int hr = 0;
         
-        
-        
-        try{
-            long taskTimeInMilli = (long) 1000 * ((Integer.valueOf(txtSeconds.getText())) + 
-                (Integer.valueOf(txtMinutes.getText()) * 60) +
-                (Integer.valueOf(txtHours.getText()) * 60 * 60));
-            
-            if(cboxAddSession.isSelected()){
-                Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        boolean inputError = false;
+           
+        // Make sure edit doesn't progress without valid integer input
+
+            // Make sure input values are valid integers
+            try{
+                sec = Integer.valueOf(txtSeconds.getText());
+            }catch(NumberFormatException numberException){
+                lblSecError.setText("(Please input a valid integer between 0-10,000)");
+                lblSecError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+
+                inputError = true;
+            }
                 
-                editedTask.addSession(taskTimeInMilli, date);
-            }else
-                editedTask.addTime(taskTimeInMilli);
-            
-            editedTask.setName(txtNameInput.getText());
+
+            try{
+                min = Integer.valueOf(txtMinutes.getText());
+
+            }catch(NumberFormatException numberException){
+                lblMinError.setText("(Please input a valid integer between 0-10,000)");
+                lblMinError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+                inputError = true;
+            }
+
+            try{
+                hr = Integer.valueOf(txtHours.getText());
+
+            }catch(NumberFormatException numberException){
+                lblHrError.setText("(Please input a valid integer between 0-10,000)");
+                lblHrError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+                inputError = true;
+            }
 
             
-            // Ends editing
-            confirmedStatus = true;
-            editingTask = false;
+            // Make sure input values are within 0 - 10,000
+            if((inputError == false) && !(withinRange(sec))){
+                inputError = true;
+                lblSecError.setText("(Please input a valid integer between 0-10,000)");
+                lblSecError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+            }
             
-        }catch(NumberFormatException numberException){
-            // Reset the fields because  input was could not be parsed into  type int
-            // To later be casted to long
-            loadTaskValues();
+            if((inputError == false) && !(withinRange(min))){
+                inputError = true;
+                lblMinError.setText("(Please input a valid integer between 0-10,000)");
+                lblMinError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+            }
             
-            
-            
-        }
-
+            if((inputError == false) && !(withinRange(min))){
+                inputError = true;
+                lblHrError.setText("(Please input a valid integer between 0-10,000)");
+                lblHrError.setStyle("-fx-text-fill: derive(#d11313, 30%);");
+            }
+                        
         
+        if(inputError == false){
+        
+            // Make sure time was added before using these values
+            // and adding time to the task record
+            if(cboxAddTime.isSelected()){
+
+                try{
+                    long taskTimeInMilli = (long) 1000 * ((Integer.valueOf(txtSeconds.getText())) + 
+                        (Integer.valueOf(txtMinutes.getText()) * 60) +
+                        (Integer.valueOf(txtHours.getText()) * 60 * 60));
+
+                    if(cboxAddSession.isSelected()){
+                        Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+                        editedTask.addSession(taskTimeInMilli, date);
+                    }else{
+                        editedTask.addTime(taskTimeInMilli);
+
+                    }
+
+
+                }catch(NumberFormatException numberException){
+                    // Reset the fields because  input was could not be parsed into  type int
+                    // To later be casted to long
+                    loadTaskValues();
+
+
+
+                }
+
+            }
+
+                editedTask.setName(txtNameInput.getText());
+
+                // Ends editing
+                confirmedStatus = true;
+                editingTask = false;
+
+        }
+    }
+    
+    //Checks whether an int is between 0-10000
+    public boolean withinRange(int testValue){
+        if(testValue < 0 || testValue > 10000)
+            return false;
+        else
+            return true;
     }
     
     @FXML
