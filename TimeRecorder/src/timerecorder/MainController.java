@@ -124,8 +124,8 @@ public class MainController extends TimerTask{
             
         }
         
-        public void iniTaskList(){
-            TaskRepository temp = storageController.attemptToLoadFile();
+        public void iniTasks(){
+            TaskRepository temp = storageController.attemptToLoadDefaultFile();
             
             if(temp != null && !temp.getTasks().isEmpty()){
                 dataController.setTaskRepo(temp);
@@ -134,12 +134,6 @@ public class MainController extends TimerTask{
             
         }
         
-        public void iniTasks(){
-            TaskRepository taskRepo = new TaskRepository();
-            taskRepo.setTasks(new TaskGenerator().getSomeTasks());
-            dataController.setTaskRepo(taskRepo);
-            updateTaskList();
-        }
         
         // Action Handlers //
         //                 //

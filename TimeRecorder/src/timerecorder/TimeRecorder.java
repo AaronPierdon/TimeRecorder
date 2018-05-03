@@ -26,7 +26,7 @@ import timerecorderdatamodel.TaskRepository;
 public class TimeRecorder extends Application {
     
     public static final File DEFAULTDIR = new File(System.getProperty("user.home") +
-            "\\documents\\Time Recorder\\");
+            "\\documents\\Time Recorder");
     
     // Used for creating a file chooser
     public static Stage theStage;
