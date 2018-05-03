@@ -1,7 +1,6 @@
 #Main Needs#
 
 test and make more robust
-make it so pressing enter corresponds to using a button without the user needing to change keyboard focus
 make a better clock icon
 
 

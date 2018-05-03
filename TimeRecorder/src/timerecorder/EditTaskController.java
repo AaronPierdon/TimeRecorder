@@ -15,6 +15,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -124,6 +126,11 @@ public class EditTaskController {
         return confirmedStatus;
     }
     
+    @FXML
+    protected void keyPressed(KeyEvent e){
+        if(e.getCode() == KeyCode.ENTER)
+            confirmEdit(null);
+    }
     
     @FXML
     protected void confirmEdit(ActionEvent event){

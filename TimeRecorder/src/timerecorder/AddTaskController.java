@@ -14,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import timerecorderdatamodel.Task;
 
@@ -82,6 +84,12 @@ public class AddTaskController{
                 return this.newTask;
             }
 
+            @FXML
+            protected void enterTaskName(KeyEvent event){
+                if(event.getCode() == KeyCode.ENTER){
+                    addTaskInput(null);
+                }
+            }
             
             @FXML
             protected void addTaskInput(ActionEvent event){

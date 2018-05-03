@@ -25,6 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -273,12 +275,14 @@ public class MainController extends TimerTask{
 
                     VBox confirmPane = new VBox();
                     confirmPane.setAlignment(Pos.BOTTOM_CENTER);
+                        
                     
                     VBox confirmPaneHolder = new VBox();
                     confirmPaneHolder.setAlignment(Pos.CENTER);
                     
                     
                     Button btnConfirm = new Button("Confirm");
+                    
                     
                     btnConfirm.addEventHandler(MouseEvent.MOUSE_CLICKED, new 
                         EventHandler<MouseEvent>(){
@@ -300,6 +304,17 @@ public class MainController extends TimerTask{
                             });
                     
                     HBox btnBox = new HBox();
+                   
+                    confirmPane.addEventHandler(KeyEvent.KEY_PRESSED, new
+                        EventHandler<KeyEvent>(){
+                            @Override
+                            public void handle(KeyEvent e){
+                                if(e.getCode() == KeyCode.ENTER){
+                                    confirmedDelete();
+                                    restoreRoot();
+                                }
+                            }
+                        });
                     btnBox.setPadding(new Insets(5, 5, 5, 5));
                     btnBox.setSpacing(5);
                     btnBox.setAlignment(Pos.BOTTOM_RIGHT);
@@ -328,7 +343,7 @@ public class MainController extends TimerTask{
                     confirmPaneHolder.getChildren().addAll(lblBox, confirmPane);
                     
                     this.root.setCenter(confirmPaneHolder);
-                
+                    confirmPane.requestFocus();
             
             }
         }

@@ -8,7 +8,7 @@
 
 <VBox fx:id="rootAddView" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="175.0" stylesheets="@../timerecorder/stylesheet.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextField id="txtTaskInput" fx:id="txtTaskInput" alignment="CENTER" promptText="Task Name" stylesheets="@../timerecorder/stylesheet.css" VBox.vgrow="ALWAYS">
+      <TextField id="txtTaskInput" fx:id="txtTaskInput" alignment="CENTER" onKeyPressed="#enterTaskName" promptText="Task Name" stylesheets="@../timerecorder/stylesheet.css" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets />
          </VBox.margin>
