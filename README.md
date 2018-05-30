@@ -1,7 +1,9 @@
 # TimeRecorder
 
 
-(https://github.com/AaronPierdon/TimeRecorder/tree/master/TimeRecorder/src/web-images/webclock.jpg)
+image:: https://github.com/AaronPierdon/TimeRecorder/tree/master/TimeRecorder/src/web-images/webclock.jpg
+  : height : 200px
+  : width : 300px
 
 ## What is Time Recorder
   Time recorder is a program that helps you track how much time you spend in a given task. This can be something done non-technical or something techincal, like using a program.
