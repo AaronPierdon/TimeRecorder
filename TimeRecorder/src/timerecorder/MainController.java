@@ -563,6 +563,11 @@ public class MainController extends TimerTask{
             root.setRight(vBoxRight);
         }
        
+    @FXML public void saveKeyInput(KeyEvent event){
+        if(event.getCode() == KeyCode.S && event.isControlDown()){
+            this.saveFile(null);
+        }
+    }
 
     @Override
     public void run() {
