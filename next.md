@@ -3,7 +3,12 @@
 test and make more robust
 make a better clock icon
 
+#Fix#
 
+
+why are the by day columns not centering to grid
+
+make it so by year shows all 12 months
 
 #Process Monitor#
 

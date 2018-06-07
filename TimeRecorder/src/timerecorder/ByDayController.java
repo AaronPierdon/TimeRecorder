@@ -7,9 +7,14 @@
 
 package timerecorder;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.BubbleChart;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
@@ -26,11 +31,11 @@ public class ByDayController {
     private int theMonth;
     private int theYear;
     private long maxDuration;
-    protected BubbleChart<Number, Number> chart;
+    protected BarChart<String, Number> chart;
     
   
     
-    protected BubbleChart getChart(Task task, int month, int year){
+    protected BarChart getChart(Task task, int month, int year){
         this.theTask = task;
         this.theMonth = month;
         this.theYear = year;
@@ -54,16 +59,31 @@ public class ByDayController {
             
             HashMap<Calendar, Long> sessions = theTask.getSessions();
             
+            HashMap<Integer, Long> dayTotals = new HashMap<>();
             
             for(Calendar calKey : sessions.keySet()){
                 if(theMonth == calKey.get(Calendar.MONTH) && 
                         theYear == calKey.get(Calendar.YEAR)){
                     int day = calKey.get(Calendar.DAY_OF_MONTH);
+                    
+                    // get duration for the session
                     long duration = sessions.get(calKey);
                     
-                    series1.getData().add(new XYChart.Data(day, 
-                            (TimeConverter.secondsToHours(TimeConverter.milliToSeconds(duration))),
-                        getPercentageOfMax(duration)));
+                    // if time for that day has not been totaled or added
+                    // create an entry in map
+                    
+                    if(!dayTotals.containsKey(day)){
+                        dayTotals.put(day, duration);
+                    } else{
+                        dayTotals.put(day, (dayTotals.get(day) + duration));
+                    }
+                    
+                    
+                }
+                
+                for(Integer day : dayTotals.keySet()){
+                    series1.getData().add(new XYChart.Data(String.valueOf(day), 
+                            (TimeConverter.secondsToHours(TimeConverter.milliToSeconds(dayTotals.get(day))))));
                     System.out.println(series1.getData());
                 }
             }
@@ -84,7 +104,12 @@ public class ByDayController {
             
             
             // Load the x axis with the year keys from durationByYear hashmap
-            NumberAxis xAxis = new NumberAxis(0, 31, 1);
+            ArrayList<String> days = new ArrayList<>();
+            for(int day = 0; day <= 24; day++){
+                days.add(String.valueOf(day));
+            }
+            ObservableList<String> list = FXCollections.observableArrayList(days);
+            CategoryAxis xAxis = new CategoryAxis(list);
             
             // Load the y axis with the min and max values from the durationByyear
             NumberAxis yAxis = new NumberAxis(0, 24, .5);
@@ -97,7 +122,7 @@ public class ByDayController {
             
             
             // Set up the chart
-            this.chart = new BubbleChart<>(xAxis, yAxis);
+            this.chart = new BarChart<>(xAxis, yAxis);
             this.chart.setStyle("-fx-background-color: #000000");
             this.chart.setStyle("-fx-text-fill: #3ee028");
             this.chart.setTitle("Activity by Day");
@@ -114,7 +139,8 @@ public class ByDayController {
 
 
     
-    private double getPercentageOfMax(long duration){
+    // use only for bubble chart impl. 
+    /*private double getPercentageOfMax(long duration){
         
         // Convert long milliseconds to double hours
         if(duration > 0){
@@ -131,12 +157,17 @@ public class ByDayController {
             double unRounded = duration / maxDur;
             double rounded = Math.round(unRounded * 100.0) / 100.0;
             System.out.println(rounded);
-            return rounded;
+            
+            // for now omit, just use a static size... makes bubble chart impractcal choice
+           // return rounded; //
+           
+           return .25;
+           
         } else
             return 0;
   
     
-    }
+    }*/
     
     private int getHours(long time){
         int timeInSeconds = (int) time / 1000;

@@ -33,6 +33,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import timerecorderdatamodel.Task;
 import timerecorderdatamodel.TaskRepository;
 import utility.io.parse.LongToReadableTime;
@@ -112,6 +113,8 @@ public class MainController extends TimerTask{
             this.rootWidth = 360;
             this.rootHeight = 420;
             
+            
+            
             this.isViewUpdating = false;
             
             // Set states
@@ -133,7 +136,7 @@ public class MainController extends TimerTask{
                 dataController.setTaskRepo(temp);
                 updateTaskList();
             }
-            
+
         }
         
         
@@ -255,8 +258,8 @@ public class MainController extends TimerTask{
                  this.isTimerRunning = true;
                  this.isViewUpdating = false;
 
-                 this.rootWidth = taskList.getWidth();
-                 this.rootHeight = taskList.getHeight();
+                 this.rootWidth = root.getWidth();
+                 this.rootHeight = root.getHeight();
                  displayReadoutScene();
            
         }
@@ -518,7 +521,6 @@ public class MainController extends TimerTask{
 
             Scene scene  = new Scene(root, this.rootWidth, this.rootHeight);
             this.primaryStage.setScene(scene);
-            
             updateTaskList();
         }
         
@@ -529,11 +531,15 @@ public class MainController extends TimerTask{
 
             try{
                 VBox newRoot = loader.load();
-                newRoot.setPrefHeight(rootHeight);
-                newRoot.setPrefWidth(rootWidth);
+                // Set the timer readout pref height and width
+                newRoot.setPrefHeight(300);
+                newRoot.setPrefWidth(180);
                 Scene scene = new Scene(newRoot);
+                
+                
                 this.primaryStage.setScene(scene);
 
+                
             }catch(IOException e){}
        
         }

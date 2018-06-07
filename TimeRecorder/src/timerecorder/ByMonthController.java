@@ -37,7 +37,7 @@ public class ByMonthController {
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Month of " + year);
         
-        NumberAxis yAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis(0, 300, 10);
         yAxis.setLabel("Total Time\r\n  (Hours)");
         
         
